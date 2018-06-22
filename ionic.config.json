@@ -1,0 +1,8 @@
+{
+  "name": "Worked-Hours",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
