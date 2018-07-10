@@ -14,3 +14,54 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+.has-header
+{
+   top: 52px;//your headers height
+   
+}
+
+.toolbar-content-md{
+    display: flex;
+}
+
+/* alerts */
+.alertInfo{
+    .alert-wrapper{
+        background-color:map-get($colors,light) !important;
+        color: black !important;
+    }
+    
+    .alert-message{
+        color: #333 !important;
+        overflow: auto !important;
+    }
+    button{
+        color:map-get($colors,primary) !important;
+    }
+}
+
+.alertDanger{
+    .alert-wrapper{
+        background-color:#333 !important;
+        color: red !important;
+    }
+    
+    .alert-message{
+        color: white !important;
+        overflow: auto !important;
+    }
+    button{
+        color:map-get($colors,danger)!important;
+    }
+}
+
+ion-fab[bottom]{
+    bottom:90px;
+}
+ion-fab[right]{
+    right:3rem;
+}
+
+ion-fab[left]{
+    left:3rem;
+}

@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Editar horario</ion-title>
+    <ion-buttons end>
+        <button ion-button (click)="closeModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-row padding text-center>
+    <strong>{{ viewDate | date: 'd MMMM y' }}</strong>
+  </ion-row>
+    <p>Selecciona nueva franja horaria para editarlo</p>
+  <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [hourSegments]="4" [refresh]="refresh" (hourSegmentClicked)="hour_clicked($event)"></mwl-calendar-day-view>
+</ion-content>

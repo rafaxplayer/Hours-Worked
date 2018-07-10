@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{ data.periodtext }}</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="closeModal()">Close</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <div class="modal-info">
+        <strong>{{ data.date }}</strong>
+        <span>{{ data.hour }}</span>
+    </div>
+    <button ion-button block (click)="save()"> Save</button>
+</ion-content>

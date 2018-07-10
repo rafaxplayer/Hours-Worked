@@ -1,0 +1,19 @@
+header{
+    .user-img{
+        width:40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .user-info {
+        display:flex;
+        align-items: center;
+        margin-right: 2rem;
+        color:white;
+        font-size: .9rem;
+    }
+    .user-info div>*{
+        display:block;
+    }
+}
+
+

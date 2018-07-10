@@ -1,0 +1,59 @@
+
+<ion-content ion-grid padding class="has-header">
+   <!--  Fab Buttons -->
+    <ion-fab bottom right>
+            <button ion-fab color="secondary" (click)="goCharts()"><ion-icon name="podium"></ion-icon></button>
+    </ion-fab>
+    <ion-fab bottom left *ngIf="view=='week' || view=='day'">
+        <button ion-fab color="secondary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
+    </ion-fab>
+    <!-- custom template -->
+    <ng-template #customCellTemplate let-day="day" let-locale="locale">
+        <div class="cal-cell-top">
+            <span class="cal-day-badge" *ngIf="day.events.length > 0">{{ day.events.length > 1 ? 'TP' : 'TS' }}</span>
+            <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+        </div>
+        <span text-wrap *ngIf="day.badgeTotal > 0" padding><ion-icon name="ios-time-outline"></ion-icon> {{ day.badgeTotal }} horas Trabajadas </span>
+    </ng-template>
+    <ion-row text-center padding>
+        <ion-col col-12 col-md-4>
+            <button ion-button icon-start mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+                <ion-icon name="arrow-back"></ion-icon>Anterior
+            </button>
+            <button ion-button  mwlCalendarToday [(viewDate)]="viewDate">
+                Hoy
+            </button>
+            <button ion-button icon-end mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+                Siguiente
+                <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+        </ion-col>
+        <ion-col col-12 col-md-4>
+            <ion-card padding color="dark">
+                <ion-card-content>
+                    <ion-card-title>
+                        {{ viewDate | date: 'd MMMM y' }}
+                    </ion-card-title>
+                    <p><ion-icon name="ios-time-outline"></ion-icon> {{ hoursWorked }}</p>
+                </ion-card-content>
+            </ion-card>
+            <ion-card padding *ngIf="view=='month'">
+                <p><strong>TP</strong> Turno Partido.</p>
+                <p><strong>TS</strong> Turno Seguido.</p>
+            </ion-card>
+        </ion-col>
+        <ion-col col-12 col-md-4>
+            <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="showView('month')"><ion-icon name="calendar"></ion-icon> Mes</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'"  (click)="showView('week')"><ion-icon name="calendar"></ion-icon> Semana</button>
+            <button ion-button [color]="propsButtonDay.color" icon-start *ngIf="view == 'day'" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.label }}</button>
+        </ion-col>
+    </ion-row>
+    <div [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [cellTemplate]="customCellTemplate" (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="dayClick($event.day)">
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" precision="minutes" [refresh]="refresh" (dayHeaderClicked)="weekDayClick($event.day)">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [hourSegments]="4" (hourSegmentClicked)="hour_clicked($event)" (eventClicked)="eventClicked($event)">
+        </mwl-calendar-day-view>
+    </div>
+</ion-content>
