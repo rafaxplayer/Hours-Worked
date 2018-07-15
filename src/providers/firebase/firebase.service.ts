@@ -11,10 +11,10 @@ export class FirebaseService {
   horarios: AngularFireList<any>;
 
   daysTypes:AngularFireList<any>;
-
+Storage
   authState: any = null;
     
-  constructor( private firebaseDatabase:AngularFireDatabase, private firebaseAuth:AngularFireAuth  ) { 
+  constructor( private firebaseDatabase:AngularFireDatabase, private firebaseAuth:AngularFireAuth ) { 
     this.firebaseAuth.authState.subscribe((auth) => {
       this.authState = auth;
       
@@ -92,7 +92,8 @@ export class FirebaseService {
   getHorarios(){
     return this.horarios = this.firebaseDatabase.list('horarios');
   }
-      
+
+        
   addHorario( horario:CalendarEvent):Promise<any>{
     horario.meta.id = this.firebaseDatabase.createPushId();
     let newHorario = JSON.stringify(horario);
@@ -109,15 +110,5 @@ export class FirebaseService {
     this.horarios.remove(horario.meta.id);
   }
 
-  //dayType
-
-  setDayType(date:Date,type:string){
-
-    let id = this.firebaseDatabase.createPushId();
-    let dayType={id:id, date:JSON.stringify(date), type:type}
-    this.daysTypes.set(id,dayType);
-
-  }
-
-
+  
 }

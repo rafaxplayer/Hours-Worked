@@ -1,4 +1,27 @@
 
+.holidays{
+    background-color: map-get($colors,blueday) !important;
+}
 
+.worked{
+    background-color: map-get($colors,whiteday) !important;
+}
+
+.free{
+    background-color: map-get($colors,greenday) !important;
+}
+
+.color-days{
+    display:flex;
+    justify-content: flex-start;
+    
+    span{
+        width: 2rem;
+        height: 1.5rem;
+        display: inline-block;
+        margin-right: .8rem;
+    }
+    
+}
     
 

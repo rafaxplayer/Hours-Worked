@@ -1,6 +1,8 @@
-import { Component ,Input} from '@angular/core';
+import { Component } from '@angular/core';
 import { FirebaseService } from '../../providers/firebase/firebase.service'
 import { ModalController ,Modal, Events} from 'ionic-angular';
+import { CalendarPage } from '../pages/calendar/calendar';
+
 
 @Component({
   selector: 'header',
@@ -8,10 +10,12 @@ import { ModalController ,Modal, Events} from 'ionic-angular';
 })
 export class HeaderComponent {
 
-  @Input() authState:any;
+  authState:any;
+
+  calendarPage:any=CalendarPage;
   
   constructor(private firebaseservice:FirebaseService,private modal: ModalController,public event:Events) {
-    this.event.subscribe('user',(user)=>this.authState=user)
+    this.event.subscribe('user',(user)=> this.authState = user)
   }
 
   login():void{
@@ -25,4 +29,11 @@ export class HeaderComponent {
     this.firebaseservice.signOut();
   }
 
+  goRoot(){
+    this.event.publish('goroot');
+  }
+  
+  ionViewDidLeave(){
+    this.event.unsubscribe('user');
+  }
 }

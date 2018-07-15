@@ -4,8 +4,9 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 //components
 import { AppComponent } from './app.component';
+
 import { CalendarPage } from '../components/pages/calendar/calendar';
-import { ChartsComponent } from '../components/pages/charts/charts';
+import { ChartsPage } from '../components/pages/charts/charts';
 import { HeaderComponent } from '../components/header/header';
 import { NotloginPage} from '../components/pages/notlogin/notlogin';
 import { SelectDayTypeComponent } from '../components/modal/select-daytype/select-daytype';
@@ -33,6 +34,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
+//storage
+import { IonicStorageModule } from '@ionic/storage';
+
 const firebase={
   apiKey: "AIzaSyBDqNebgm81TqptCztfHACpeZuriqwMrSI",
   authDomain: "work-manager-e2652.firebaseapp.com",
@@ -45,17 +49,24 @@ const firebase={
 @NgModule({
   declarations: [
     AppComponent,
+   
     CalendarPage,
     HeaderComponent,
     NotloginPage,
-    ChartsComponent,
+    ChartsPage,
     SelectDayTypeComponent
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(AppComponent),
+    IonicModule.forRoot(AppComponent,{
+      backButtonText:'Atras'
+    }),
     CalendarModule.forRoot(),
     BrowserAnimationsModule,
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     AngularFireModule.initializeApp(firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -64,11 +75,12 @@ const firebase={
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
+    
     CalendarPage,
-    HeaderComponent,
     NotloginPage,
-    ChartsComponent,
+    ChartsPage,
     SelectDayTypeComponent
+
   ],
   providers: [
     StatusBar,

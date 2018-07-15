@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ChangeDetectionStrategy ,ViewEncapsulation} from '@angular/core';
 import { NavController,ActionSheetController,Events,LoadingController,PopoverController } from 'ionic-angular';
 import { CalendarEvent,CalendarMonthViewDay} from 'angular-calendar';
 import { Subject } from 'rxjs';
@@ -7,25 +7,30 @@ import { isBefore, isEqual, isValid, isWithinRange, isSameDay, isSameWeek, isSam
 import { ModalController ,Modal} from 'ionic-angular';
 import { FirebaseService } from '../../../providers/firebase/firebase.service';
 import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
-import { ChartsComponent } from '../charts/charts';
+import { ChartsPage } from '../charts/charts';
 import { SelectDayTypeComponent } from '../../modal/select-daytype/select-daytype';
-import { DayType } from '../../../app/helpers';
-
+import { DayType } from '../../../interfaces/interfaces';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   templateUrl: 'calendar.html'
 })
 export class CalendarPage {
-    
-  propsButtonDay:DayType = { label:'Trabajado' ,value:'worked' ,color:'primary' };
 
+  chartsPage:any = ChartsPage;
+  
+  propsButtonDay:DayType; 
+ 
+  dayTypes:any[]=[];
+        
   events:CalendarEvent[]=[];
 
   view: string = 'month';
 
-  viewDate: Date = new Date();
+  viewDate: Date;
   
   dataBaseSubscribe:any;
 
@@ -59,14 +64,18 @@ export class CalendarPage {
     private popoverCtrl:PopoverController,
     private actSheet:ActionSheetController, 
     private dialogsProvider: DialogsProvider, 
-    private firebaseService:FirebaseService) {
+    private firebaseService:FirebaseService,
+    private store:Storage) {
       this.date = new Date();
+      this.propsButtonDay = { label:'Trabajado' ,value:'worked' ,color:'primary' };
+       this.viewDate=new Date();
+      
   }
 
   ionViewWillEnter() {
     // get events with firebase
     this.dataBaseSubscribe=this.firebaseService.getHorarios().snapshotChanges().subscribe(item => {
-     let loading=this.loadingCtrl.create();
+     let loading = this.loadingCtrl.create();
      loading.present();
       this.events = [];
       item.forEach(element => {
@@ -81,19 +90,31 @@ export class CalendarPage {
       loading.dismiss();
     }); 
 
-    this.event.subscribe('user',(user)=>{
-      if(!user){this.dataBaseSubscribe.unsubscribe()}
+    this.store.ready().then(()=>{
+
+      this.store.forEach((value, key, index)=>{
+        this.dayTypes.push({date:key,daytype:value});
+      }).then(()=> console.log(this.dayTypes))
+     
+      
     });
-   
+    
   }
 
   // day click on month.... show day view
   dayClick({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    
+
     if(this.view == 'month'){
       this.viewDate = date;
       this.view = 'day';
       this.hoursWorked = this.horasTrabajadas('day');
+      this.store.get(this.viewDate.toDateString()).then(data=>{
+        if(data != null){
+          this.propsButtonDay = data;
+          this.refresh.next();
+        }
+      });
+      
     } 
     
   }
@@ -211,17 +232,25 @@ export class CalendarPage {
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-    this.viewDate=new Date();
-    body.forEach(day => {
+    body.forEach( day => {
+           
       let minutes:number=0;
       day.events.forEach(event=>{
-        minutes=minutes+event.meta.minutes;
+        minutes = minutes+event.meta.minutes;
       })
 
       day.badgeTotal = convertMinutesToHours(minutes);
+      
+       let samedata:any = this.dayTypes.filter((data)=> day.date.toDateString() === data.date);
+      if(samedata.length){
+         day.cssClass = samedata[0].daytype.value
+      } 
+            
      
     });
+    
   }
+
  
   // helpers
   horasTrabajadas(view:string):string{
@@ -276,19 +305,22 @@ export class CalendarPage {
     return (today.length > 0);
   }
 
-  showView(view:string){
-    this.view = view;
-  }
-
+  
   showMenuFreeDays(){
-    let pop = this.popoverCtrl.create(SelectDayTypeComponent,{ date:this.viewDate });
 
-    pop.onDidDismiss((data:DayType) =>{
+    let pop = this.popoverCtrl.create(SelectDayTypeComponent,{ date:this.viewDate });
+    
+    pop.onDidDismiss((data) =>{
 
       if(data != null){
-        this.propsButtonDay = data;
-       
-        console.log('ondismiss',this.propsButtonDay);
+          this.store.set(this.viewDate.toDateString(),data)
+              .then(()=>{
+                this.dialogsProvider.dialogInfo('Ok','Tipo de dia cambiado','alertInfo',2000);
+                this.propsButtonDay = data;
+                this.refresh.next();
+                
+              })
+              .catch(()=>console.log('error'));
         
       };
     }); 
@@ -296,16 +328,23 @@ export class CalendarPage {
     pop.present();
   }
 
-  goCharts(){
-    this.navCtrl.push(ChartsComponent);
+  deleteFreeDays(){
+    this.dialogsProvider.dialogConfirm('Eliminar festivos','Se eliminaran todos los dias marcados como fiesta o vacaciones de este mes, ¿Estas de acuerdo?','alertDanger',true)
+        .then((ret)=>{
+          if(ret){
+            this.store.forEach((value,key,index)=>{
+              if(isSameMonth(key,this.viewDate)){
+                this.store.remove(key);
+              }
+            })
+            this.refresh.next();       
+          }
+        })
+       
   }
-
-  goBack(){
-    this.view = 'month';
-  }
-
+    
   ionViewDidLeave(){
     this.dataBaseSubscribe.unsubscribe();
   }
- 
+
 }

@@ -5,18 +5,16 @@ import { FirebaseService } from '../../../providers/firebase/firebase.service';
 import { CalendarEvent } from 'calendar-utils';
 import { convertMinutesToHours } from '../../../app/helpers';
 import { BaseChartDirective }  from 'ng2-charts/ng2-charts';
+import { ChartType } from '../../../interfaces/interfaces';
 
-interface ChartType {
-  id:string;
-  value:string;
-}
+
 
 @Component({
   selector: 'charts',
   templateUrl: 'charts.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartsComponent {
+export class ChartsPage {
 
   @ViewChildren(BaseChartDirective) chartList: QueryList<BaseChartDirective>;
 
@@ -25,22 +23,22 @@ export class ChartsComponent {
     responsive: true
   };
 
-  public chartType:string;
+   chartType:string;
   
-  public barChartLegend:boolean = true;
+   barChartLegend:boolean = true;
 
-  public barChartLabelsYear:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+   barChartLabelsYear:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-  public barChartLabelsWeek:string[] = ['Domingo', 'Lunes','Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+   barChartLabelsWeek:string[] = ['Domingo', 'Lunes','Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
   
-  public chartTypes:ChartType[];
+   chartTypes:ChartType[];
 
-  public barChartDataYear:Array<any> = [
+   barChartDataYear:Array<any> = [
     {data:[], label:'Horas este año'},
     {data:[], label:'Horas año anterior'}
   ];
 
-  public barChartDataWeek:Array<any> = [
+   barChartDataWeek:Array<any> = [
     {data:[], label:'Horas esta semana'},
     {data:[], label:'Horas semana anterior'}
   ];
@@ -53,7 +51,8 @@ export class ChartsComponent {
 
   chartTypeSelected:ChartType;
 
-  constructor(private firebaseService:FirebaseService,private loadingCtrl:LoadingController, public navCtrl:NavController) {
+  constructor(private firebaseService:FirebaseService ,private loadingCtrl:LoadingController ,public navCtrl:NavController) {
+    
     this.chartTypes = [{id:'bar',value:'Bars'},{id:'line',value:'Line'},{id:'pie',value:'Pie'},{id:'radar',value:'Radar'},{id:'doughnut',value:'Doughnut'}]
 
     this.chartTypeSelected = this.chartTypes[0];
@@ -176,7 +175,5 @@ export class ChartsComponent {
     
   }
 
-  goBack(){
-    this.navCtrl.pop();
-  }
+  
 }

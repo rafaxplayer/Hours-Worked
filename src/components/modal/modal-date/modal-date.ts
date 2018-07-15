@@ -18,14 +18,14 @@ export class ModalDatePage {
   
   public data:any;
 
-  constructor( private navParams: NavParams, private viewcontroller:ViewController) {}
+  constructor( private navParams: NavParams, private viewCtrl:ViewController) {}
 
   closeModal(){
-    this.viewcontroller.dismiss({isValid:false});
+    this.viewCtrl.dismiss({isValid:false});
   }
 
   save(){
-    this.viewcontroller.dismiss({isValid:true});
+    this.viewCtrl.dismiss({isValid:true});
   }
 
   ionViewWillLoad() {

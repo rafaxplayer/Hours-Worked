@@ -1,9 +1,4 @@
 
-export interface DayType{
-  label:string,
-  value:string,
-  color:string
-}
 
 export function addZeros(time:any):any{
     

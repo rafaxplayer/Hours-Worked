@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
-import { DayType } from '../../../app/helpers';
+import { DayType } from '../../../interfaces/interfaces';
 
 @Component({
   selector: 'select-free',
@@ -11,14 +11,17 @@ import { DayType } from '../../../app/helpers';
     </ion-list-header>
     <ion-item *ngFor="let day of dayTypes">
       <ion-label>{{ day.label }}</ion-label>
-      <ion-radio [value]="day" (click)="dismiss()"></ion-radio>
+      <ion-radio [value]="day" (click)="closePopover()"></ion-radio>
     </ion-item>
   </ion-list>
 `
 })
 export class SelectDayTypeComponent {
 
-  dayTypes:DayType[] = [{label:'Trabajado',value:'worked',color:'primary'},{label:'Fiesta',value:'free',color:'green'},{label:'Vacaciones',value:'holidays',color:'blue'}]
+  dayTypes:DayType[] = [
+    {label:'Trabajado',value:'worked',color:'whiteday'},
+    {label:'Fiesta',value:'free',color:'greenday'},
+    {label:'Vacaciones',value:'holidays',color:'blueday'}]
   
   selectionDayType:DayType;
 
@@ -29,15 +32,14 @@ export class SelectDayTypeComponent {
     if(this.navParams.data){
       this.date = this.navParams.data.date;
       this.selectionDayType = this.dayTypes[0]
+      
     }
     
   }
-  dismiss(){
-    console.log(this.selectionDayType);
+  closePopover(){
+            
       this.viewCtrl.dismiss(this.selectionDayType);
   }
 
-  change(){
-
-  }
+  
 }

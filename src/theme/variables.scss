@@ -40,8 +40,10 @@ $app-direction: ltr;
     danger:#bb3939,
     light:#e4f9f5,
     dark:#40514e,
-    green:rgb(4, 173, 89),
-    blue:rgb(55, 12, 247)
+    whiteday: #fff,
+    greenday:#56ebc6,
+    blueday:#80c9e2
+
    );
    // header 
    $toolbar-background: map-get($colors, primary);

@@ -17,6 +17,9 @@
 .has-header
 {
    top: 52px;//your headers height
+   .scroll-content{
+    margin-bottom: 6rem
+   }
    
 }
 
@@ -61,7 +64,7 @@ ion-fab[bottom]{
 ion-fab[right]{
     right:3rem;
 }
-
 ion-fab[left]{
     left:3rem;
 }
+

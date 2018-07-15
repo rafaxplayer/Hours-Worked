@@ -11,7 +11,7 @@ export class ModalLoginPage {
 
   registerCredentials = { email: '', password: '' };
 
-  constructor(public view:ViewController,private firebaseService:FirebaseService) {
+  constructor(public view:ViewController,private firebaseService:FirebaseService,private viewCtrl:ViewController) {
   }
 
   ionViewDidLoad() {
@@ -30,5 +30,9 @@ export class ModalLoginPage {
     this.firebaseService.googleLogin()
         .then(()=>{this.view.dismiss()})
         
+  }
+
+  closeModal(){
+    this.viewCtrl.dismiss({isValid:false});
   }
 }

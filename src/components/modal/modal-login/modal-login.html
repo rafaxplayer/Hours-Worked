@@ -1,3 +1,11 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>Identificarse</ion-title>
+      <ion-buttons end>
+          <button ion-button (click)="closeModal()">Close</button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
 <ion-content class="login-content" padding>
   <ion-row class="logo-row">
     <ion-col></ion-col>
@@ -23,7 +31,7 @@
       <ion-row class="button-row">
           <button ion-button class="submit-btn" block type="submit" [disabled]="!registerForm.form.valid">Login</button>
       </ion-row>
-      <ion-row class="button-row">
+      <ion-row class="button-row" hideWhen="android,ios">
         <button ion-button icon-start block (click)="loginWithGoogle()"><ion-icon name="logo-google"></ion-icon>Sigin With Google</button>
       </ion-row>
     </form>

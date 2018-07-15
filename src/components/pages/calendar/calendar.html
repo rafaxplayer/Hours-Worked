@@ -2,10 +2,10 @@
 <ion-content ion-grid padding class="has-header">
    <!--  Fab Buttons -->
     <ion-fab bottom right>
-            <button ion-fab color="secondary" (click)="goCharts()"><ion-icon name="podium"></ion-icon></button>
+            <button ion-fab color="secondary" [navPush]="chartsPage"><ion-icon name="podium"></ion-icon></button>
     </ion-fab>
     <ion-fab bottom left *ngIf="view=='week' || view=='day'">
-        <button ion-fab color="secondary" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></button>
+        <button ion-fab color="secondary" (click)="view = 'month'"><ion-icon name="arrow-back"></ion-icon></button>
     </ion-fab>
     <!-- custom template -->
     <ng-template #customCellTemplate let-day="day" let-locale="locale">
@@ -40,18 +40,26 @@
             <ion-card padding *ngIf="view=='month'">
                 <p><strong>TP</strong> Turno Partido.</p>
                 <p><strong>TS</strong> Turno Seguido.</p>
+                <br>
+                <hr>
+                <br>
+                <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>Trabajado </div>
+                <div class="color-days"> <span class="free"></span>Fiesta</div>
+                <div class="color-days"> <span class="holidays"></span>Vacaciones</div>
             </ion-card>
         </ion-col>
         <ion-col col-12 col-md-4>
-            <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="showView('month')"><ion-icon name="calendar"></ion-icon> Mes</button>
-            <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'"  (click)="showView('week')"><ion-icon name="calendar"></ion-icon> Semana</button>
-            <button ion-button [color]="propsButtonDay.color" icon-start *ngIf="view == 'day'" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.label }}</button>
+            <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="view = 'month'"><ion-icon name="calendar"></ion-icon> Mes</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'" (click)="view = 'week'"><ion-icon name="calendar"></ion-icon> Semana</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> Eliminar Fiestas</button>
+            <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.label }}</button>
         </ion-col>
     </ion-row>
     <div [ngSwitch]="view">
-        <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [cellTemplate]="customCellTemplate" (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="dayClick($event.day)">
+        <mwl-calendar-month-view #calendar *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [cellTemplate]="customCellTemplate" (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="dayClick($event.day)">
         </mwl-calendar-month-view>
         <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" precision="minutes" [refresh]="refresh" (dayHeaderClicked)="weekDayClick($event.day)">
+
         </mwl-calendar-week-view>
         <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [hourSegments]="4" (hourSegmentClicked)="hour_clicked($event)" (eventClicked)="eventClicked($event)">
         </mwl-calendar-day-view>
