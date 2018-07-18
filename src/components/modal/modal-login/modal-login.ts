@@ -13,10 +13,7 @@ export class ModalLoginPage {
 
   constructor(public view:ViewController,private firebaseService:FirebaseService,private viewCtrl:ViewController) {
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ModalLoginPage');
-  }
+  
   login(){
     if(this.registerCredentials.email || this.registerCredentials.password){
       this.firebaseService.useremailLogin(this.registerCredentials)

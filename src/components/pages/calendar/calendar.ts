@@ -231,7 +231,9 @@ export class CalendarPage {
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+
     console.log('beforeMonthViewRender is called');
+
     body.forEach( day => {
            
       let minutes:number=0;
@@ -332,9 +334,10 @@ export class CalendarPage {
             this.store.forEach((value ,key ,index)=>{
               if(isSameMonth(key,this.viewDate)){
                 this.store.remove(key);
+                
               }
             })
-            this.refresh.next();  
+            this.refresh.next();
           }
         })
   }
