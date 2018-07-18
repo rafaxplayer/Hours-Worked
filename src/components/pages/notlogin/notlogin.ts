@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {  NavController, NavParams } from 'ionic-angular';
+import {  NavController, NavParams, LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the NotloginPage page.
@@ -15,9 +15,21 @@ import {  NavController, NavParams } from 'ionic-angular';
 })
 export class NotloginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    console.log('ionViewDidLoad NotloginPage');
+  showImageNotLogin:boolean;
+
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private loaderCtrl:LoadingController) {
+    this.showImageNotLogin=false;
   }
 
+
+  ionViewWillEnter(){
+    let loader = this.loaderCtrl.create();
+    loader.present();
+    setTimeout(()=>{
+      this.showImageNotLogin=true;
+      loader.dismiss()},2000)
+  }
   
 }

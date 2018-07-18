@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { DayType } from '../../../interfaces/interfaces';
+import { DayTypes } from '../../../app/helpers';
 
 @Component({
   selector: 'select-free',
@@ -18,10 +19,7 @@ import { DayType } from '../../../interfaces/interfaces';
 })
 export class SelectDayTypeComponent {
 
-  dayTypes:DayType[] = [
-    {label:'Trabajado',value:'worked',color:'whiteday'},
-    {label:'Fiesta',value:'free',color:'greenday'},
-    {label:'Vacaciones',value:'holidays',color:'blueday'}]
+  dayTypes:DayType[]=DayTypes;
   
   selectionDayType:DayType;
 
@@ -30,12 +28,15 @@ export class SelectDayTypeComponent {
   constructor(public navParams:NavParams,private viewCtrl:ViewController) {
 
     if(this.navParams.data){
+
       this.date = this.navParams.data.date;
-      this.selectionDayType = this.dayTypes[0]
-      
+      //console.log(this.navParams.data.dayType);
+      this.selectionDayType = this.dayTypes.filter((dayType)=> dayType.value == this.navParams.data.dayType.value)[0];
+     
     }
     
   }
+  
   closePopover(){
             
       this.viewCtrl.dismiss(this.selectionDayType);

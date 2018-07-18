@@ -29,7 +29,7 @@
             </button>
         </ion-col>
         <ion-col col-12 col-md-4>
-            <ion-card padding color="dark">
+            <ion-card padding [color]="view == 'day' ? propsButtonDay.color : 'dark' ">
                 <ion-card-content>
                     <ion-card-title>
                         {{ viewDate | date: 'd MMMM y' }}
@@ -38,14 +38,15 @@
                 </ion-card-content>
             </ion-card>
             <ion-card padding *ngIf="view=='month'">
-                <p><strong>TP</strong> Turno Partido.</p>
-                <p><strong>TS</strong> Turno Seguido.</p>
-                <br>
-                <hr>
-                <br>
-                <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>Trabajado </div>
-                <div class="color-days"> <span class="free"></span>Fiesta</div>
-                <div class="color-days"> <span class="holidays"></span>Vacaciones</div>
+                <ion-item>
+                    <p><strong>TP</strong> Turno Partido.</p>
+                    <p><strong>TS</strong> Turno Seguido.</p>
+                </ion-item>
+                <ion-item>
+                    <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>Trabajado </div>
+                    <div class="color-days"> <span class="free"></span>Fiesta</div>
+                    <div class="color-days"> <span class="holidays"></span>Vacaciones</div>
+                </ion-item>
             </ion-card>
         </ion-col>
         <ion-col col-12 col-md-4>
@@ -64,4 +65,5 @@
         <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [hourSegments]="4" (hourSegmentClicked)="hour_clicked($event)" (eventClicked)="eventClicked($event)">
         </mwl-calendar-day-view>
     </div>
+    
 </ion-content>

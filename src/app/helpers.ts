@@ -1,4 +1,4 @@
-
+import { DayType } from '../interfaces/interfaces';
 
 export function addZeros(time:any):any{
     
@@ -52,3 +52,7 @@ export function convertMinutesToHours(m:number):number{
     return `${outputh} ${addZeros(date.getHours())}:${addZeros(date.getMinutes())} Horas`;
   }
 
+export const DayTypes:DayType[] = [
+  {label:'Trabajado',value:'worked',color:'whiteday'},
+  {label:'Fiesta',value:'free',color:'greenday'},
+  {label:'Vacaciones',value:'holidays',color:'blueday'}]

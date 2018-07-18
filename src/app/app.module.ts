@@ -2,13 +2,12 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
-//components
+//components & Pages
 import { AppComponent } from './app.component';
-
-import { CalendarPage } from '../components/pages/calendar/calendar';
-import { ChartsPage } from '../components/pages/charts/charts';
+import { CalendarPage, ChartsPage, NotloginPage  } from '../components/pages/pages.index';
 import { HeaderComponent } from '../components/header/header';
-import { NotloginPage} from '../components/pages/notlogin/notlogin';
+
+//popover
 import { SelectDayTypeComponent } from '../components/modal/select-daytype/select-daytype';
 
 

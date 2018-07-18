@@ -33,7 +33,9 @@ page-modal-login {
          margin: 0px 16px 0px 16px;
          padding-bottom: 10px;
        }
-   
+       .button-inner{
+         color:white !important;
+       }
        .item-inner {
          border-bottom-color:map-get($colors, light);
          box-shadow: none !important;
