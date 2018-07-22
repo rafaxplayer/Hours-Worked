@@ -51,7 +51,9 @@ export class ChartsPage {
 
   chartTypeSelected:ChartType;
 
-  constructor(private firebaseService:FirebaseService ,private loadingCtrl:LoadingController ,public navCtrl:NavController) {
+  constructor(private firebaseService:FirebaseService ,
+              private loadingCtrl:LoadingController ,
+              public navCtrl:NavController) {
     
     this.chartTypes = [{id:'bar',value:'Bars'},{id:'line',value:'Line'},{id:'pie',value:'Pie'},{id:'radar',value:'Radar'},{id:'doughnut',value:'Doughnut'}]
 

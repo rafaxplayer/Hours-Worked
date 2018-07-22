@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title (click)="goRoot()">
-            Worked Hours
+            Hours Worked 
         </ion-title>
         <div class="user-panel">
             <div class="user-info" *ngIf="authState">
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div *ngIf="!authState">
-                <button  ion-button icon-start color="danger" (click)='login()' end><ion-icon name="md-person"></ion-icon> Entrar</button>
+                <button ion-button icon-start color="danger" (click)="login()" end><ion-icon name="md-person"></ion-icon> Entrar</button>
             </div>
         </div>
     </ion-navbar>

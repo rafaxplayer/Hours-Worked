@@ -11,8 +11,8 @@ export class DialogsProvider {
     let alrtInfo = this.alertCtrl.create({
       title: title,
       message: message,
-      buttons: ['Ok'],
-      cssClass:cClass,
+      buttons: ['Cerrar'],
+      cssClass:'alert ' + cClass,
       enableBackdropDismiss:BackdropDismiss
     });
     if(time){
@@ -39,7 +39,7 @@ export class DialogsProvider {
             handler: () => { alrtConfirm.dismiss().then(()=>resolve(false)) ; return false}
           }
         ],
-        cssClass:cClass,
+        cssClass:'alert ' + cClass,
         enableBackdropDismiss:BackdropDismiss
       });
       alrtConfirm.present();

@@ -1,8 +1,9 @@
-
-
 <ion-content padding class="has-header">
+    <ion-fab bottom left>
+        <button ion-fab color="secondary" navPop><ion-icon name="arrow-back"></ion-icon></button>
+    </ion-fab>
   <ion-row class="navigation">
-    <button ion-button icon-start navPop><ion-icon name="md-arrow-back"></ion-icon>Calendario</button>
+    <!-- <button ion-button icon-start navPop><ion-icon name="md-arrow-back"></ion-icon>Calendario</button> -->
       <select ([ngModel])="chartTypeSelected.value" (change)="chartChange($event)" class="select-type">
           <option>Char type</option>
           <option *ngFor="let type of chartTypes" [value]="type.id">{{type.value}}</option>

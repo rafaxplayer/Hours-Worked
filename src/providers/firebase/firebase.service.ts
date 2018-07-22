@@ -3,6 +3,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth } from 'firebase/app';
 import { CalendarEvent } from 'angular-calendar';
+import { DayType } from '../../interfaces/interfaces';
 
 
 @Injectable()
@@ -11,7 +12,7 @@ export class FirebaseService {
   horarios: AngularFireList<any>;
 
   daysTypes:AngularFireList<any>;
-Storage
+
   authState: any = null;
     
   constructor( private firebaseDatabase:AngularFireDatabase, private firebaseAuth:AngularFireAuth ) { 
@@ -110,5 +111,12 @@ Storage
     this.horarios.remove(horario.meta.id);
   }
 
+  getDayTypes(){
+    return this.daysTypes = this.firebaseDatabase.list('tipos-dia');
+  }
+
+  addDayType(date:Date,typeDay:DayType){
+      return this.daysTypes.set(date.toDateString(),typeDay);
+  }
   
 }

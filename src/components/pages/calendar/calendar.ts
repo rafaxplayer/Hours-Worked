@@ -10,7 +10,6 @@ import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
 import { ChartsPage } from '../pages.index';
 import { SelectDayTypeComponent } from '../../modal/select-daytype/select-daytype';
 import { DayType } from '../../../interfaces/interfaces';
-import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -22,7 +21,7 @@ export class CalendarPage {
   chartsPage:any = ChartsPage;
   
   propsButtonDay:DayType; 
- 
+
   dayTypesStored:any[]=[];
         
   events:CalendarEvent[]=[];
@@ -31,7 +30,9 @@ export class CalendarPage {
 
   viewDate: Date;
   
-  dataBaseSubscribe:any;
+  dataBaseHourHandSubscribe:any;
+
+  dataBaseDayTypesSubscribe:any;
 
   hoursWorked:string = "00:00";
 
@@ -63,39 +64,40 @@ export class CalendarPage {
     private popoverCtrl:PopoverController,
     private actSheet:ActionSheetController, 
     private dialogsProvider: DialogsProvider, 
-    private firebaseService:FirebaseService,
-    private store:Storage) {
+    private firebaseService:FirebaseService) {
       this.date = new Date();
       this.propsButtonDay = DayTypes[0];
-       this.viewDate=new Date();
+      this.viewDate = new Date();
       
   }
 
   ionViewWillEnter() {
     // get events with firebase
-    this.dataBaseSubscribe=this.firebaseService.getHorarios().snapshotChanges().subscribe(item => {
+    this.dataBaseHourHandSubscribe = this.firebaseService.getHorarios().snapshotChanges().subscribe(item => {
      let loading = this.loadingCtrl.create();
      loading.present();
       this.events = [];
       item.forEach(element => {
         let x = element.payload.toJSON();
-        x["start"] = new Date(x["start"]);
-        x["end"] = new Date(x["end"]); 
+        x["start"] = new Date( x["start"] );
+        x["end"] = new Date( x["end"] ); 
         x["actions"] = [];
-        this.events.push(x as CalendarEvent);
-        this.hoursWorked = this.horasTrabajadas('month');
+        this.events.push( x as CalendarEvent );
+        this.hoursWorked = `${this.horasTrabajadas('month')} horas trabajadas`;
       });  
       this.refresh.next();
       loading.dismiss();
     }); 
+   
 
-    this.store.ready().then(()=>{
-
-      this.store.forEach((value, key, index)=>{
-        this.dayTypesStored.push({date:key,daytype:value});
-      }).then(()=> console.log(this.dayTypesStored))
+    this.dataBaseDayTypesSubscribe = this.firebaseService.getDayTypes().snapshotChanges().subscribe(item=>{
+      this.dayTypesStored = [];
+      item.forEach(element =>{
+        this.dayTypesStored.push({date:element.key,daytype:element.payload.val()})
+      });
       
-    });
+      this.refresh.next();
+    })
     
   }
 
@@ -106,18 +108,14 @@ export class CalendarPage {
       this.viewDate = date;
       this.view = 'day';
       this.hoursWorked = this.horasTrabajadas('day');
-      this.store.get(this.viewDate.toDateString()).then(data=>{
-        this.propsButtonDay = DayTypes[0];
-        if(data != null){
-          this.propsButtonDay = data;
-          this.refresh.next();        }
-        this.refresh.next();
-      }).catch((err)=>{this.dialogsProvider.dialogInfo('Error',err,'alertDanger',3000)});
-      
+
+      let daytypedata:any = this.dayTypesStored.filter((data)=> this.viewDate.toDateString() === data.date);
+      this.propsButtonDay = daytypedata.length ? daytypedata[0].daytype : DayTypes[0];
+            
     } 
     
   }
-
+  
   weekDayClick(event){
     this.viewDate = event.date;
     this.view = 'day';
@@ -231,9 +229,7 @@ export class CalendarPage {
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-
-    console.log('beforeMonthViewRender is called');
-
+    
     body.forEach( day => {
            
       let minutes:number=0;
@@ -243,16 +239,16 @@ export class CalendarPage {
 
       day.badgeTotal = convertMinutesToHours(minutes);
       
-      let samedata:any = this.dayTypesStored.filter((data)=> day.date.toDateString() === data.date);
+        let samedata:any = this.dayTypesStored.filter((data) => day.date.toDateString() === data.date);
 
-      if(samedata.length){
-         day.cssClass = samedata[0].daytype.value
-      } 
+        if(samedata.length){
+           day.cssClass = samedata[0].daytype.value
+        } 
+     
      
     });
     
   }
-
  
   // helpers
   horasTrabajadas(view:string):string{
@@ -265,7 +261,7 @@ export class CalendarPage {
         minutes = minutes + element.meta.minutes;
         
       });
-      ret = formatMinutes(minutes) + " Horas Trabajadas";
+      ret = formatMinutes(minutes);
     }else{
       ret='No hay horas';
     }
@@ -273,28 +269,27 @@ export class CalendarPage {
   }
 
   getEventsWithView(view:string):CalendarEvent[]{
-
-    let eventsFilter:CalendarEvent[];
-
-    switch(view){
-      case "day":
-        eventsFilter = this.events.filter(iEvent => isSameDay(iEvent.start,this.viewDate));
-      break;
-      case "month":
-        eventsFilter = this.events.filter(iEvent => isSameMonth(iEvent.start,this.viewDate));
-      break;
-      case "week":
-        eventsFilter = this.events.filter(iEvent => isSameWeek(iEvent.start,this.viewDate));
-      break;
-      default:
-        eventsFilter = this.events.filter(iEvent => isSameMonth(iEvent.start,this.viewDate));
-      
-    }
     
-    return eventsFilter;
+    return this.events.filter(iEvent =>{
+            switch(view){
+              case "day":
+                return isSameDay(iEvent.start,this.viewDate);
+              
+              case "month":
+                return isSameMonth(iEvent.start,this.viewDate);
+              
+              case "week":
+                return isSameWeek(iEvent.start,this.viewDate);
+              
+              default:
+                return isSameMonth(iEvent.start,this.viewDate);
+              
+            }
+
+    });
       
   }
-
+  // comprueba si dos eventos se solapan
   checkSchedulesOverlap(date:CalendarEvent,events:CalendarEvent[]):boolean{
    
     //get events today
@@ -314,13 +309,12 @@ export class CalendarPage {
     
     pop.onDidDismiss((data) =>{
       if(data != null){
-          this.store.set(this.viewDate.toDateString(),data)
-              .then(()=>{
-                this.dialogsProvider.dialogInfo('Ok','Tipo de dia cambiado','alertInfo',2000);
-                this.propsButtonDay = data;
-                this.refresh.next();
-              })
-              .catch((err)=>{this.dialogsProvider.dialogInfo('Error',err,'alertDanger',3000)});
+          this.firebaseService.addDayType(this.viewDate,data).then(()=>{
+            this.propsButtonDay = data;
+            this.refresh.next();
+            this.dialogsProvider.dialogInfo('Ok','Tipo de dia cambiado','alertInfo');
+          }).catch((err)=>{this.dialogsProvider.dialogInfo('Error',err,'alertDanger',3000)});
+          
       };
     }); 
 
@@ -331,19 +325,14 @@ export class CalendarPage {
     this.dialogsProvider.dialogConfirm('Eliminar festivos','Se eliminaran todos los dias marcados como fiesta o vacaciones de este mes, ¿Estas de acuerdo?','alertDanger',true)
         .then((ret)=>{
           if(ret){
-            this.store.forEach((value ,key ,index)=>{
-              if(isSameMonth(key,this.viewDate)){
-                this.store.remove(key);
-                
-              }
-            })
-            this.refresh.next();
+            this.firebaseService.getDayTypes().remove();
           }
         })
   }
     
   ionViewDidLeave(){
-    this.dataBaseSubscribe.unsubscribe();
+    this.dataBaseHourHandSubscribe.unsubscribe();
+    this.dataBaseDayTypesSubscribe.unsubscribe();
   }
 
 }

@@ -19,10 +19,8 @@ export class HeaderComponent {
   }
 
   login():void{
-    
     const modalLogin:Modal = this.modal.create('ModalLoginPage');
     modalLogin.present();
-    
   }
   
   logOut():void{

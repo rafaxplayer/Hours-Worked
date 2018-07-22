@@ -4,7 +4,7 @@
     <ion-fab bottom right>
             <button ion-fab color="secondary" [navPush]="chartsPage"><ion-icon name="podium"></ion-icon></button>
     </ion-fab>
-    <ion-fab bottom left *ngIf="view=='week' || view=='day'">
+    <ion-fab bottom left *ngIf="view=='week' || view =='day'">
         <button ion-fab color="secondary" (click)="view = 'month'"><ion-icon name="arrow-back"></ion-icon></button>
     </ion-fab>
     <!-- custom template -->
@@ -13,7 +13,7 @@
             <span class="cal-day-badge" *ngIf="day.events.length > 0">{{ day.events.length > 1 ? 'TP' : 'TS' }}</span>
             <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
         </div>
-        <span text-wrap *ngIf="day.badgeTotal > 0" padding><ion-icon name="ios-time-outline"></ion-icon> {{ day.badgeTotal }} horas Trabajadas </span>
+        <span class="hours-info" *ngIf="day.badgeTotal > 0" padding><ion-icon name="ios-time-outline"></ion-icon> {{ day.badgeTotal }} horas</span>
     </ng-template>
     <ion-row text-center padding>
         <ion-col col-12 col-md-4>
@@ -84,5 +84,4 @@
             (eventClicked)="eventClicked($event)">
         </mwl-calendar-day-view>
     </div>
-    
 </ion-content>

@@ -19,7 +19,7 @@ import { DayTypes } from '../../../app/helpers';
 })
 export class SelectDayTypeComponent {
 
-  dayTypes:DayType[]=DayTypes;
+  dayTypes:DayType[] = DayTypes;
   
   selectionDayType:DayType;
 

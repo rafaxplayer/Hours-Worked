@@ -29,14 +29,21 @@
 
 /* alerts */
 .alertInfo{
+    
     .alert-wrapper{
-        background-color:map-get($colors,light) !important;
+        background-color:white !important;
         color: black !important;
+        .alert-head{
+            background-color: map-get($colors,primary) !important;
+            color:white;
+           
+        }
     }
     
     .alert-message{
+        
         color: #333 !important;
-        overflow: auto !important;
+        
     }
     button{
         color:map-get($colors,primary) !important;
@@ -45,17 +52,40 @@
 
 .alertDanger{
     .alert-wrapper{
+        .alert-head{
+            background-color: black !important;
+            color:white;
+                        
+        }
         background-color:#333 !important;
         color: red !important;
     }
     
     .alert-message{
+        
         color: white !important;
-        overflow: auto !important;
+        
     }
     button{
         color:map-get($colors,danger)!important;
     }
+}
+
+.alert{
+    .alert-wrapper{
+        .alert-head{
+            h2{
+                font-size: 1.9rem;
+            }
+        }
+        
+    }
+    
+    .alert-message{
+        margin-top: 2rem;
+        overflow: auto !important;
+    }
+   
 }
 
 ion-fab[bottom]{
@@ -68,3 +98,12 @@ ion-fab[left]{
     left:3rem;
 }
 
+// Applied by the showWhen directive
+.hidden-show-when {
+    display: none !important;
+  }
+  
+  // Applied by the hideWhen directive
+  .hidden-hide-when {
+    display: none !important;
+  }

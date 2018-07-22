@@ -11,13 +11,13 @@ export class ModalLoginPage {
 
   registerCredentials = { email: '', password: '' };
 
-  constructor(public view:ViewController,private firebaseService:FirebaseService,private viewCtrl:ViewController) {
+  constructor(private firebaseService:FirebaseService,private viewCtrl:ViewController) {
   }
   
   login(){
     if(this.registerCredentials.email || this.registerCredentials.password){
       this.firebaseService.useremailLogin(this.registerCredentials)
-          .then(()=>this.view.dismiss())
+          .then(()=> this.viewCtrl.dismiss() )
           
     }
     
@@ -25,7 +25,7 @@ export class ModalLoginPage {
 
   loginWithGoogle(){
     this.firebaseService.googleLogin()
-        .then(()=>{this.view.dismiss()})
+        .then(()=>{this.viewCtrl.dismiss()})
         
   }
 
