@@ -1,6 +1,6 @@
 {
     "name": "hours-worked",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": "Juan Rafael Simarro",
     "homepage": "https://juanrafaelsimarro.com/",
     "private": true,
@@ -36,7 +36,6 @@
         "cordova-plugin-splashscreen": "^5.0.2",
         "cordova-plugin-statusbar": "^2.4.2",
         "cordova-plugin-whitelist": "^1.3.3",
-        "cordova-sqlite-storage": "^2.3.3",
         "date-fns": "^1.29.0",
         "firebase": "^5.2.0",
         "ionic-angular": "3.9.2",
@@ -52,7 +51,7 @@
         "@ionic/app-scripts": "3.1.10",
         "typescript": "~2.6.2"
     },
-    "description": "An Ionic project",
+    "description": "Manage hours worked app",
     "config": {
         "ionic_copy": "./config/copy.config.js"
     },
@@ -63,8 +62,7 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-ionic-webview": {},
             "cordova-plugin-ionic-keyboard": {},
-            "cordova-plugin-statusbar": {},
-            "cordova-sqlite-storage": {}
+            "cordova-plugin-statusbar": {}
         },
         "platforms": [
             "android"

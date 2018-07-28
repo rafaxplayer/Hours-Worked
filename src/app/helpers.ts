@@ -6,7 +6,6 @@ export function addZeros(time:any):any{
         time = "0" + time;
     }
     return time;
-
 }
 
 export function formatMinutes(m:number):string{
@@ -14,8 +13,6 @@ export function formatMinutes(m:number):string{
     var minutes = m%60
     var hours = (m - minutes) / 60
     return addZeros(hours) + ":" + addZeros(minutes);
-  
-
 }
 
 export function convertMinutesToHours(m:number):number{
@@ -56,3 +53,4 @@ export const DayTypes:DayType[] = [
   {label:'Trabajado',value:'worked',color:'whiteday'},
   {label:'Fiesta',value:'free',color:'greenday'},
   {label:'Vacaciones',value:'holidays',color:'blueday'}]
+  

@@ -21,7 +21,7 @@ export class SelectDayTypeComponent {
 
   dayTypes:DayType[] = DayTypes;
   
-  selectionDayType:DayType;
+  selectionDayType:DayType; 
 
   date:Date;
   
@@ -31,7 +31,7 @@ export class SelectDayTypeComponent {
 
       this.date = this.navParams.data.date;
       //console.log(this.navParams.data.dayType);
-      this.selectionDayType = this.dayTypes.filter((dayType)=> dayType.value == this.navParams.data.dayType.value)[0];
+      this.selectionDayType = DayTypes.filter((dayType)=> dayType.value == this.navParams.data.dayType.value)[0];
      
     }
     

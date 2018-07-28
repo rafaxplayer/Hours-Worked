@@ -64,7 +64,7 @@
             [events]="events" 
             [refresh]="refresh" 
             [cellTemplate]="customCellTemplate" 
-            (beforeViewRender)="beforeMonthViewRender($event)" 
+            (beforeViewRender)="beforeViewRender($event)" 
             (dayClicked)="dayClick($event.day)">
         </mwl-calendar-month-view>
         <mwl-calendar-week-view 
@@ -73,6 +73,7 @@
             [events]="events" 
             precision="minutes" 
             [refresh]="refresh" 
+            (beforeViewRender)="beforeViewRender($event)" 
             (dayHeaderClicked)="weekDayClick($event.day)">
         </mwl-calendar-week-view>
         <mwl-calendar-day-view 
@@ -81,6 +82,7 @@
             [events]="events" [refresh]="refresh" 
             [hourSegments]="4" 
             (hourSegmentClicked)="hour_clicked($event)" 
+            (beforeViewRender)="beforeViewRender($event)" 
             (eventClicked)="eventClicked($event)">
         </mwl-calendar-day-view>
     </div>

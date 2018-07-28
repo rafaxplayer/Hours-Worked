@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { NavController,ActionSheetController,Events,LoadingController,PopoverController } from 'ionic-angular';
-import { CalendarEvent,CalendarMonthViewDay} from 'angular-calendar';
+import { Component, ChangeDetectionStrategy,ChangeDetectorRef,ViewChild, Input } from '@angular/core';
+import { NavController,ActionSheetController,Events,LoadingController,PopoverController,Content } from 'ionic-angular';
+import { CalendarEvent  } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { DayTypes ,formatMinutes, convertMinutesToHours, getFormatDate,getFormatHour,getPeriodMsg} from '../../../app/helpers';
-import { isBefore, isEqual, isValid, isWithinRange, isSameDay, isSameWeek, isSameMonth, differenceInMinutes } from 'date-fns'
+import { isBefore, isEqual, isValid, isWithinRange, isSameDay, differenceInMinutes } from 'date-fns'
 import { ModalController ,Modal} from 'ionic-angular';
 import { FirebaseService } from '../../../providers/firebase/firebase.service';
 import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
@@ -18,6 +18,8 @@ import { DayType } from '../../../interfaces/interfaces';
 })
 export class CalendarPage {
 
+  @ViewChild(Content) content: Content;
+
   chartsPage:any = ChartsPage;
   
   propsButtonDay:DayType; 
@@ -26,9 +28,9 @@ export class CalendarPage {
         
   events:CalendarEvent[]=[];
 
-  view: string = 'month';
+  view:string = 'month';
 
-  viewDate: Date;
+  viewDate:Date;
   
   dataBaseHourHandSubscribe:any;
 
@@ -64,7 +66,8 @@ export class CalendarPage {
     private popoverCtrl:PopoverController,
     private actSheet:ActionSheetController, 
     private dialogsProvider: DialogsProvider, 
-    private firebaseService:FirebaseService) {
+    private firebaseService:FirebaseService,
+    private changeref:ChangeDetectorRef) {
       this.date = new Date();
       this.propsButtonDay = DayTypes[0];
       this.viewDate = new Date();
@@ -83,7 +86,6 @@ export class CalendarPage {
         x["end"] = new Date( x["end"] ); 
         x["actions"] = [];
         this.events.push( x as CalendarEvent );
-        this.hoursWorked = `${this.horasTrabajadas('month')} horas trabajadas`;
       });  
       this.refresh.next();
       loading.dismiss();
@@ -95,7 +97,6 @@ export class CalendarPage {
       item.forEach(element =>{
         this.dayTypesStored.push({date:element.key,daytype:element.payload.val()})
       });
-      
       this.refresh.next();
     })
     
@@ -103,23 +104,17 @@ export class CalendarPage {
 
   // day click on month.... show day view
   dayClick({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-
     if(this.view == 'month'){
       this.viewDate = date;
       this.view = 'day';
-      this.hoursWorked = this.horasTrabajadas('day');
-
-      let daytypedata:any = this.dayTypesStored.filter((data)=> this.viewDate.toDateString() === data.date);
-      this.propsButtonDay = daytypedata.length ? daytypedata[0].daytype : DayTypes[0];
-            
     } 
     
   }
-  
+
+  // header day click ... show view day
   weekDayClick(event){
     this.viewDate = event.date;
     this.view = 'day';
-    this.hoursWorked = this.horasTrabajadas('day');
   }
 
   //Event clicked
@@ -218,8 +213,7 @@ export class CalendarPage {
           }).catch(erro=>{
             this.dialogsProvider.dialogInfo('Error al crear horario',erro,'alertDanger');
           });
-         
-          this.horasTrabajadas(this.view);
+          
         }
 
       }else{ this.startHorario = true }
@@ -227,68 +221,47 @@ export class CalendarPage {
     });
    
   }
-
-  beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+  
+  beforeViewRender(event): void {
     
-    body.forEach( day => {
-           
-      let minutes:number=0;
-      day.events.forEach(event=>{
-        minutes = minutes+event.meta.minutes;
-      })
+    let totalminutes = 0;
 
-      day.badgeTotal = convertMinutesToHours(minutes);
-      
-        let samedata:any = this.dayTypesStored.filter((data) => day.date.toDateString() === data.date);
-
-        if(samedata.length){
-           day.cssClass = samedata[0].daytype.value
-        } 
-     
-     
+    event.period.events.forEach( evt => {
+      totalminutes= totalminutes + evt.meta.minutes;
     });
+    // print hours worked on panel information
+    this.hoursWorked = `${convertMinutesToHours(totalminutes)} horas trabajadas`;
     
-  }
- 
-  // helpers
-  horasTrabajadas(view:string):string{
-    let ret="";
-    let horariosFilter = this.getEventsWithView(view);
-    if(horariosFilter){
-      let minutes = 0;
-      horariosFilter.forEach(element => {
+    //view month render...
+    if( this.view == 'month' ){
+      event.body.forEach( day => {
+        let minutes:number=0;
+        day.events.forEach(event=>{
+          minutes = minutes+event.meta.minutes;
+        })
         
-        minutes = minutes + element.meta.minutes;
+        day.badgeTotal = convertMinutesToHours(minutes);
         
+          let samedata:any = this.dayTypesStored.filter((data) => day.date.toDateString() === data.date);
+  
+          if(samedata.length){
+             day.cssClass = samedata[0].daytype.value
+          } 
+       
       });
-      ret = formatMinutes(minutes);
-    }else{
-      ret='No hay horas';
     }
-    return ret;
-  }
-
-  getEventsWithView(view:string):CalendarEvent[]{
+    // view day render....
+    if( this.view =='day' ){
+      // button typeday on view day
+      let daytypedata:any = this.dayTypesStored.filter((data)=> isSameDay(this.viewDate.toDateString(), data.date));
+      this.propsButtonDay = daytypedata.length > 0 ? daytypedata[0].daytype : DayTypes[0];
+      // detect changes
+      this.changeref.detectChanges();
+    }
+    this.content.scrollToTop();
     
-    return this.events.filter(iEvent =>{
-            switch(view){
-              case "day":
-                return isSameDay(iEvent.start,this.viewDate);
-              
-              case "month":
-                return isSameMonth(iEvent.start,this.viewDate);
-              
-              case "week":
-                return isSameWeek(iEvent.start,this.viewDate);
-              
-              default:
-                return isSameMonth(iEvent.start,this.viewDate);
-              
-            }
-
-    });
-      
   }
+     
   // comprueba si dos eventos se solapan
   checkSchedulesOverlap(date:CalendarEvent,events:CalendarEvent[]):boolean{
    
@@ -314,7 +287,6 @@ export class CalendarPage {
             this.refresh.next();
             this.dialogsProvider.dialogInfo('Ok','Tipo de dia cambiado','alertInfo');
           }).catch((err)=>{this.dialogsProvider.dialogInfo('Error',err,'alertDanger',3000)});
-          
       };
     }); 
 
@@ -329,7 +301,14 @@ export class CalendarPage {
           }
         })
   }
+
+  changeView(view:string):void{
+    console.log('call calendar page',view);
     
+    this.view = view;
+    this.changeref.detectChanges();
+  }
+
   ionViewDidLeave(){
     this.dataBaseHourHandSubscribe.unsubscribe();
     this.dataBaseDayTypesSubscribe.unsubscribe();

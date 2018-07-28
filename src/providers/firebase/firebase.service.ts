@@ -115,7 +115,7 @@ export class FirebaseService {
     return this.daysTypes = this.firebaseDatabase.list('tipos-dia');
   }
 
-  addDayType(date:Date,typeDay:DayType){
+  addDayType(date:Date, typeDay:DayType){
       return this.daysTypes.set(date.toDateString(),typeDay);
   }
   

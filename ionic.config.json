@@ -1,6 +1,6 @@
 {
   "name": "Hours-Worked",
-  "app_id": "",
+  "app_id": "7b066538",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
