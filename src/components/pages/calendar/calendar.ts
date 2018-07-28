@@ -10,6 +10,7 @@ import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
 import { ChartsPage } from '../pages.index';
 import { SelectDayTypeComponent } from '../../modal/select-daytype/select-daytype';
 import { DayType } from '../../../interfaces/interfaces';
+//npm i -g ionic@3.20.0
 
 @Component({
   selector: 'page-home',

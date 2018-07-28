@@ -1,6 +1,6 @@
 import { Component ,ChangeDetectionStrategy, ViewChildren, QueryList} from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
-import { isWithinRange, isThisWeek } from 'date-fns';
+import { NavController,NavParams, LoadingController } from 'ionic-angular';
+import { isWithinRange, isThisWeek, isSameWeek } from 'date-fns';
 import { FirebaseService } from '../../../providers/firebase/firebase.service';
 import { CalendarEvent } from 'calendar-utils';
 import { convertMinutesToHours } from '../../../app/helpers';
@@ -43,7 +43,7 @@ export class ChartsPage {
     {data:[], label:'Horas semana anterior'}
   ];
 
-  date:Date = new Date();
+  date:Date;
   
   horarios:CalendarEvent[]=[];
   
@@ -53,19 +53,27 @@ export class ChartsPage {
 
   constructor(private firebaseService:FirebaseService ,
               private loadingCtrl:LoadingController ,
-              public navCtrl:NavController) {
+              public navCtrl:NavController,
+              public navParams:NavParams) {
     
     this.chartTypes = [{id:'bar',value:'Bars'},{id:'line',value:'Line'},{id:'pie',value:'Pie'},{id:'radar',value:'Radar'},{id:'doughnut',value:'Doughnut'}]
 
     this.chartTypeSelected = this.chartTypes[0];
 
     this.chartType= this.chartTypeSelected.id;
+
+    if(navParams.data){
+      this.date = navParams.data.date;
+    }
+
+    console.log(navParams.get('date'));
+    
     
   }
 
   ionViewWillEnter(){
     this.dataBaseSubsribe = this.firebaseService.getHorarios().snapshotChanges().subscribe(item =>{
-      let loading=this.loadingCtrl.create();
+      let loading = this.loadingCtrl.create();
       loading.present();
       item.forEach((data)=> {
         this.horarios.push(data.payload.val() as CalendarEvent) 
@@ -94,7 +102,7 @@ export class ChartsPage {
   }
 
   updateChartWeekHours(dataChartWeek:Array<any>){
-    for( let i=0; i<7; i++){ 
+    for( let i=0; i < 7; i++){ 
       dataChartWeek[0].data.push(this.getDayHoursofThisWeek(this.horarios, i, this.date.getFullYear(), true)); 
       dataChartWeek[1].data.push(this.getDayHoursofThisWeek(this.horarios, i, this.date.getFullYear(), false)); 
     
@@ -105,7 +113,7 @@ export class ChartsPage {
 
   getMonthHours(data:CalendarEvent[],month:number,year:number):number{
 
-    let minutes=0;
+    let minutes = 0;
     let thisMonth = data.filter(item => {
       const itemDate= new Date(item.start);
       return itemDate.getMonth() == month && itemDate.getFullYear() == year;
@@ -132,12 +140,12 @@ export class ChartsPage {
 
       if(isThis){
 
-        return itemDate.getDay() == dayofWeek && isThisWeek( itemDate  ) && itemDate.getFullYear() == year;
+          return  itemDate.getDay() == dayofWeek && isSameWeek( itemDate, this.date  );
 
       }else{
-
-        
+       
         return itemDate.getDay() == dayofWeek && isWithinRange( itemDate , range.first, range.last ) && itemDate.getFullYear() == year;
+      
       }
       
     });
@@ -170,10 +178,11 @@ export class ChartsPage {
   }
 
   chartChange(event){
+    
     if(event.target.value == 'Char type'){
       return;
     }
-    this.chartType= event.target.value
+    this.chartType = event.target.value
     
   }
 

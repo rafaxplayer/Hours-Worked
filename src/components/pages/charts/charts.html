@@ -5,17 +5,17 @@
   <ion-row class="navigation">
     <!-- <button ion-button icon-start navPop><ion-icon name="md-arrow-back"></ion-icon>Calendario</button> -->
       <select ([ngModel])="chartTypeSelected.value" (change)="chartChange($event)" class="select-type">
-          <option>Char type</option>
+          <option selected style="display:none">Char type</option>
           <option *ngFor="let type of chartTypes" [value]="type.id">{{type.value}}</option>
       </select>
   </ion-row>
-  <div class="chars-wraped">
-    <div class="char">
-        <h2 text-center>Horas Trabajadas esta semana</h2>
+  <div class="charts-wraped">
+    <div class="chart">
+        <h2 text-center>Horas Trabajadas la semana del {{ date | date: 'd MMMM y' }}</h2>
         <canvas baseChart [datasets]="barChartDataWeek" [labels]="barChartLabelsWeek" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
     </div>
-    <div class="char">
-        <h2 text-center>Horas Trabajadas este año</h2>
+    <div class="chart">
+        <h2 text-center>Horas Trabajadas el año {{date | date: 'y'}} </h2>
         <canvas baseChart [datasets]="barChartDataYear" [labels]="barChartLabelsYear" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
     </div>
 </div>

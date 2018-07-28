@@ -2,7 +2,7 @@
 <ion-content ion-grid padding class="has-header">
    <!--  Fab Buttons -->
     <ion-fab bottom right>
-            <button ion-fab color="secondary" [navPush]="chartsPage"><ion-icon name="podium"></ion-icon></button>
+            <button ion-fab color="secondary" [navPush]="chartsPage" [navParams]="{date:viewDate}"><ion-icon name="podium"></ion-icon></button>
     </ion-fab>
     <ion-fab bottom left *ngIf="view=='week' || view =='day'">
         <button ion-fab color="secondary" (click)="view = 'month'"><ion-icon name="arrow-back"></ion-icon></button>
