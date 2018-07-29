@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy,ChangeDetectorRef,ViewChild, Input } from '@angular/core';
-import { NavController,ActionSheetController,Events,LoadingController,PopoverController,Content } from 'ionic-angular';
+import { Component, ChangeDetectionStrategy,ChangeDetectorRef,ViewChild } from '@angular/core';
+import { NavController,ActionSheetController,Events,PopoverController,Content } from 'ionic-angular';
 import { CalendarEvent  } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { DayTypes ,formatMinutes, convertMinutesToHours, getFormatDate,getFormatHour,getPeriodMsg} from '../../../app/helpers';
@@ -13,7 +13,7 @@ import { DayType } from '../../../interfaces/interfaces';
 //npm i -g ionic@3.20.0
 
 @Component({
-  selector: 'page-home',
+  selector: 'calendar-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'calendar.html'
 })
@@ -59,9 +59,11 @@ export class CalendarPage {
   }
 
   refresh: Subject<any> = new Subject();
+
+  loading:boolean;
   
-  constructor(public navCtrl: NavController ,
-    private loadingCtrl:LoadingController ,
+  constructor(
+    public navCtrl: NavController ,
     public event:Events, 
     private modal: ModalController,
     private popoverCtrl:PopoverController,
@@ -78,8 +80,7 @@ export class CalendarPage {
   ionViewWillEnter() {
     // get events with firebase
     this.dataBaseHourHandSubscribe = this.firebaseService.getHorarios().snapshotChanges().subscribe(item => {
-     let loading = this.loadingCtrl.create();
-     loading.present();
+     
       this.events = [];
       item.forEach(element => {
         let x = element.payload.toJSON();
@@ -87,9 +88,10 @@ export class CalendarPage {
         x["end"] = new Date( x["end"] ); 
         x["actions"] = [];
         this.events.push( x as CalendarEvent );
-      });  
+      }); 
+      
       this.refresh.next();
-      loading.dismiss();
+      
     }); 
    
 
@@ -167,6 +169,7 @@ export class CalendarPage {
   }
 
   openModal(){
+
     let periodMsg = getPeriodMsg(this.startHorario);
     let dateModal = getFormatDate(this.date);
     let hourModal = getFormatHour(this.date,this.startHorario);
@@ -180,6 +183,7 @@ export class CalendarPage {
     let modalDate:Modal = this.modal.create('ModalDatePage',{ data:dataModal });
     modalDate.present();
     modalDate.onDidDismiss((data)=>{
+
       if(data.isValid){
         if(!isValid(this.date)){
           this.dialogsProvider.dialogInfo('Error','El horario no es valido','alertDanger');
@@ -230,6 +234,7 @@ export class CalendarPage {
     event.period.events.forEach( evt => {
       totalminutes= totalminutes + evt.meta.minutes;
     });
+
     // print hours worked on panel information
     this.hoursWorked = `${convertMinutesToHours(totalminutes)} horas trabajadas`;
     
@@ -251,6 +256,7 @@ export class CalendarPage {
        
       });
     }
+
     // view day render....
     if( this.view =='day' ){
       // button typeday on view day

@@ -1,35 +1,36 @@
 
-.holidays{
-    background-color: map-get($colors,blueday) !important;
-    
-}
-
-.worked{
-    background-color: map-get($colors,whiteday) !important;
-}
-
-.free{
-    background-color: map-get($colors,greenday) !important;
-    
-}
-
-.color-days{
-    display:flex;
-    justify-content: flex-start;
-    padding: .2rem 0;
-    
-    span{
-        width: 2rem;
-        height: 1.5rem;
-        display: inline-block;
-        margin-right: .8rem;
+calendar-page{
+    .holidays{
+        background-color: map-get($colors,blueday) !important;
+        
     }
-    
-}
-.hours-info{
-    color:#a5a1a1;
-    font-weight: 600;
-}
 
+    .worked{
+        background-color: map-get($colors,whiteday) !important;
+    }
+
+    .free{
+        background-color: map-get($colors,greenday) !important;
+        
+    }
+
+    .color-days{
+        display:flex;
+        justify-content: flex-start;
+        padding: .2rem 0;
+        
+        span{
+            width: 2rem;
+            height: 1.5rem;
+            display: inline-block;
+            margin-right: .8rem;
+        }
+        
+    }
+    .hours-info{
+        color:#a5a1a1;
+        font-weight: 600;
+    }
+}
     
 

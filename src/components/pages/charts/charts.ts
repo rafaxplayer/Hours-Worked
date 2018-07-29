@@ -1,6 +1,6 @@
 import { Component ,ChangeDetectionStrategy, ViewChildren, QueryList} from '@angular/core';
-import { NavController,NavParams, LoadingController } from 'ionic-angular';
-import { isWithinRange, isThisWeek, isSameWeek } from 'date-fns';
+import { NavController,NavParams } from 'ionic-angular';
+import { isWithinRange ,isSameWeek } from 'date-fns';
 import { FirebaseService } from '../../../providers/firebase/firebase.service';
 import { CalendarEvent } from 'calendar-utils';
 import { convertMinutesToHours } from '../../../app/helpers';
@@ -8,9 +8,8 @@ import { BaseChartDirective }  from 'ng2-charts/ng2-charts';
 import { ChartType } from '../../../interfaces/interfaces';
 
 
-
 @Component({
-  selector: 'charts',
+  selector: 'charts-page',
   templateUrl: 'charts.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,8 +50,9 @@ export class ChartsPage {
 
   chartTypeSelected:ChartType;
 
+  loadingShow:boolean;
+
   constructor(private firebaseService:FirebaseService ,
-              private loadingCtrl:LoadingController ,
               public navCtrl:NavController,
               public navParams:NavParams) {
     
@@ -65,23 +65,19 @@ export class ChartsPage {
     if(navParams.data){
       this.date = navParams.data.date;
     }
-
-    console.log(navParams.get('date'));
-    
     
   }
 
   ionViewWillEnter(){
     this.dataBaseSubsribe = this.firebaseService.getHorarios().snapshotChanges().subscribe(item =>{
-      let loading = this.loadingCtrl.create();
-      loading.present();
+      
       item.forEach((data)=> {
         this.horarios.push(data.payload.val() as CalendarEvent) 
       });
       this.updateChartYearHours( this.barChartDataYear );
       this.updateChartWeekHours( this.barChartDataWeek );
       this.updateCharts();
-      loading.dismiss();
+      
     });
   }
 
@@ -178,7 +174,7 @@ export class ChartsPage {
   }
 
   chartChange(event){
-    
+
     if(event.target.value == 'Char type'){
       return;
     }

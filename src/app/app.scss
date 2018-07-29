@@ -16,7 +16,7 @@
 // automatically applied to the <body> element in the app.
 .has-header
 {
-   top: 52px;//your headers height
+   top: 82px;//your headers height
    .scroll-content{
     margin-bottom: 6rem
    }
@@ -87,9 +87,8 @@
     }
    
 }
-
 ion-fab[bottom]{
-    bottom:90px;
+    bottom:120px;
 }
 ion-fab[right]{
     right:3rem;
@@ -110,3 +109,4 @@ ion-fab[left]{
   .button{
       border-radius: 20px;
   }
+

@@ -37,7 +37,7 @@ export class AppComponent {
           activeView.instance.changeView('month');
           console.log(activeView.instance.view);
           
-        }else if(activeView.name == 'Chartsage'){
+        }else if(activeView.name == 'ChartsPage'){
             nav.pop();
         }
         

@@ -10,7 +10,6 @@ import { HeaderComponent } from '../components/header/header';
 //popover
 import { SelectDayTypeComponent } from '../components/modal/select-daytype/select-daytype';
 
-
 //native
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -48,12 +47,12 @@ const firebase={
 @NgModule({
   declarations: [
     AppComponent,
-   
     CalendarPage,
     HeaderComponent,
     NotloginPage,
     ChartsPage,
     SelectDayTypeComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -74,12 +73,11 @@ const firebase={
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
-    
     CalendarPage,
     NotloginPage,
     ChartsPage,
-    SelectDayTypeComponent
-
+    SelectDayTypeComponent,
+    
   ],
   providers: [
     StatusBar,
