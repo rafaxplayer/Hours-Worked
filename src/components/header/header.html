@@ -2,22 +2,17 @@
     <ion-navbar>
         <img width="50px" height="50px" src="assets/imgs/logo.png" alt="hours worked logo">
         <ion-title (click)="goRoot()">
-            Hours Worked 
+            {{ 'APP-TITLE' | translate}}
         </ion-title>
-        <div class="user-panel">
-            <div class="user-info" *ngIf="authState">
-                <!-- <img class="user-img" src="{{authState.photoURL}}" alt=""> -->
-                <div>
-                    <span class="user-name">{{authState.email}}</span>
-                    <span ion-button small icon-start color="danger" (click)="logOut()">
-                        <ion-icon name="exit"></ion-icon>
-                        Salir
-                    </span>
-                </div>
-            </div>
-            <div *ngIf="!authState">
-                <button ion-button icon-start color="danger" (click)="login()" end><ion-icon name="md-person"></ion-icon> Entrar</button>
-            </div>
-        </div>
+
+        <ion-select [(ngModel)]="location" (ionChange)="choose($event)">
+            <ion-option value="es" selected="'es' == location">
+                {{ 'SPANISH' | translate }}
+            </ion-option>
+            <ion-option value="en" selected="'en' == location">
+                {{ 'ENGLISH' | translate }}
+            </ion-option>
+          </ion-select>
     </ion-navbar>
+    
 </ion-header>

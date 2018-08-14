@@ -4,7 +4,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 //components & Pages
 import { AppComponent } from './app.component';
-import { CalendarPage, ChartsPage, NotloginPage  } from '../components/pages/pages.index';
+import { CalendarPage, ChartsPage } from '../components/pages/pages.index';
 import { HeaderComponent } from '../components/header/header';
 
 //popover
@@ -13,10 +13,11 @@ import { SelectDayTypeComponent } from '../components/modal/select-daytype/selec
 //native
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { SQLite } from '@ionic-native/sqlite';
 
 //Providers
-import { FirebaseService } from '../providers/firebase/firebase.service';
 import { DialogsProvider } from '../providers/dialogs/dialogs.service';
+import { DatabaseProvider } from '../providers/database/database';
 
 //Animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,21 +28,21 @@ import { CalendarModule } from 'angular-calendar';
 //charts
 import { ChartsModule } from 'ng2-charts';
 
-//firebase
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+//http
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
-//storage
-import { IonicStorageModule } from '@ionic/storage';
+//translation
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import localeEs from '@angular/common/locales/es';
+import localeEn from '@angular/common/locales/en';
+import { registerLocaleData } from '../../node_modules/@angular/common';
 
-const firebase={
-  apiKey: "AIzaSyBDqNebgm81TqptCztfHACpeZuriqwMrSI",
-  authDomain: "work-manager-e2652.firebaseapp.com",
-  databaseURL: "https://work-manager-e2652.firebaseio.com",
-  projectId: "work-manager-e2652",
-  storageBucket: "work-manager-e2652.appspot.com",
-  messagingSenderId: "813326057616"
+registerLocaleData(localeEs)
+registerLocaleData(localeEn)
+
+export function setTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -49,42 +50,38 @@ const firebase={
     AppComponent,
     CalendarPage,
     HeaderComponent,
-    NotloginPage,
     ChartsPage,
     SelectDayTypeComponent
-    
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(AppComponent,{
-      backButtonText:'Atras'
-    }),
+    HttpClientModule,
+    IonicModule.forRoot(AppComponent),
     CalendarModule.forRoot(),
-    BrowserAnimationsModule,
-    IonicStorageModule.forRoot({
-      name: '__mydb',
-      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (setTranslateLoader),
+        deps: [HttpClient]
+      }
     }),
-    AngularFireModule.initializeApp(firebase),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
+    BrowserAnimationsModule,
     ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     AppComponent,
     CalendarPage,
-    NotloginPage,
     ChartsPage,
     SelectDayTypeComponent,
-    
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    FirebaseService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DialogsProvider
+    DialogsProvider,
+    DatabaseProvider,
+    SQLite
   ]
 })
 export class AppModule {}

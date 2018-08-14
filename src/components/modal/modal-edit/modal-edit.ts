@@ -5,7 +5,7 @@ import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
 import { formatMinutes, getFormatDate,getFormatHour,getPeriodMsg} from '../../../app/helpers';
 import { isValid,isBefore,isEqual, differenceInMinutes } from 'date-fns'
 import { Subject } from 'rxjs';
-import { FirebaseService } from '../../../providers/firebase/firebase.service';
+import { DatabaseProvider } from '../../../providers/database/database';
 
 
 
@@ -29,7 +29,7 @@ export class ModalEditPage {
     public navParams: NavParams,
     private dialogsProvider:DialogsProvider,
     private modalCtrl:ModalController,
-    private firebaseService:FirebaseService) {
+    private database:DatabaseProvider) {
 
     this.viewDate = this.navParams.get('date');
     this.event = this.navParams.get('event');
@@ -95,9 +95,12 @@ export class ModalEditPage {
           this.dialogsProvider.dialogConfirm('Ok','Horario creado,¿Quieres guardarlo asi?','alertInfo',false)
               .then((ret)=>{
                 if(ret){
-                  this.firebaseService.updateHorario(this.event).then(()=>{
+                  /* this.firebaseService.updateHorario(this.event).then(()=>{
                     this.viewCtrl.dismiss({ isUpdate:true });
-                  });
+                  }); */
+                  this.database.updateHorario(this.event).then(()=>{
+                    this.viewCtrl.dismiss({ isUpdate:true });
+                  })
                   
                 }else{
                   this.events.pop();

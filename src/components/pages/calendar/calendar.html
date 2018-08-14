@@ -1,6 +1,6 @@
 
 <ion-content ion-grid padding class="has-header">
-    
+   
     <!--  Fab Buttons -->
     <ion-fab bottom right>
             <button ion-fab color="secondary" [navPush]="chartsPage" [navParams]="{date:viewDate}"><ion-icon name="podium"></ion-icon></button>
@@ -19,13 +19,13 @@
     <ion-row text-center padding>
         <ion-col col-12 col-md-4>
             <button ion-button icon-start mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
-                <ion-icon name="arrow-back"></ion-icon>Anterior
+                <ion-icon name="arrow-back"></ion-icon>{{ 'PREVIOUS' | translate }}
             </button>
             <button ion-button  mwlCalendarToday [(viewDate)]="viewDate">
-                Hoy
+                {{ 'TODAY' | translate }}
             </button>
             <button ion-button icon-end mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
-                Siguiente
+                {{ 'NEXT' | translate }}
                 <ion-icon name="arrow-forward"></ion-icon>
             </button>
         </ion-col>
@@ -40,20 +40,20 @@
             </ion-card>
             <ion-card padding *ngIf="view=='month'">
                 <ion-item>
-                    <p><strong>TP</strong> Turno Partido.</p>
-                    <p><strong>TS</strong> Turno Seguido.</p>
+                    <p><strong>TP</strong> {{ 'TURN-FOLLOWED' | translate }}.</p>
+                    <p><strong>TS</strong> {{ 'MATCH-TURN' | translate }}.</p>
                 </ion-item>
                 <ion-item>
-                    <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>Trabajado </div>
-                    <div class="color-days"> <span class="free"></span>Fiesta</div>
-                    <div class="color-days"> <span class="holidays"></span>Vacaciones</div>
+                    <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>{{ 'WORKED' | translate }} </div>
+                    <div class="color-days"> <span class="free"></span>{{ 'FREE' | translate }}</div>
+                    <div class="color-days"> <span class="holidays"></span>{{ 'HOLIDAY' | translate }}</div>
                 </ion-item>
             </ion-card>
         </ion-col>
         <ion-col col-12 col-md-4>
-            <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="view = 'month'"><ion-icon name="calendar"></ion-icon> Mes</button>
-            <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'" (click)="view = 'week'"><ion-icon name="calendar"></ion-icon> Semana</button>
-            <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> Eliminar Fiestas</button>
+            <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="view = 'month'"><ion-icon name="calendar"></ion-icon> {{ 'MONTH' | translate }}</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'" (click)="view = 'week'"><ion-icon name="calendar"></ion-icon> {{ 'WEEK' | translate }}</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> {{ 'DELETE-FREE' | translate }}</button>
             <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.label }}</button>
         </ion-col>
     </ion-row>
@@ -64,6 +64,8 @@
             [viewDate]="viewDate" 
             [events]="events" 
             [refresh]="refresh" 
+            [locale]="locale"
+            [weekStartsOn]="weekStartsOn"
             [cellTemplate]="customCellTemplate" 
             (beforeViewRender)="beforeViewRender($event)" 
             (dayClicked)="dayClick($event.day)">
@@ -74,6 +76,8 @@
             [events]="events" 
             precision="minutes" 
             [refresh]="refresh" 
+            [locale]="locale"
+            [weekStartsOn]="weekStartsOn"
             (beforeViewRender)="beforeViewRender($event)" 
             (dayHeaderClicked)="weekDayClick($event.day)">
         </mwl-calendar-week-view>
@@ -82,6 +86,7 @@
             [viewDate]="viewDate" 
             [events]="events" [refresh]="refresh" 
             [hourSegments]="4" 
+            [locale]="locale"
             (hourSegmentClicked)="hour_clicked($event)" 
             (beforeViewRender)="beforeViewRender($event)" 
             (eventClicked)="eventClicked($event)">

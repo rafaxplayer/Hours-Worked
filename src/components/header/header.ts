@@ -1,30 +1,36 @@
 import { Component } from '@angular/core';
-import { FirebaseService } from '../../providers/firebase/firebase.service'
-import { ModalController ,Modal, Events} from 'ionic-angular';
+import { Platform ,Events} from 'ionic-angular';
 import { CalendarPage } from '../pages/calendar/calendar';
-
+import { TranslateService, LangChangeEvent} from '@ngx-translate/core';
 
 @Component({
   selector: 'header',
   templateUrl: 'header.html'
 })
 export class HeaderComponent {
+ 
+  calendarPage:any = CalendarPage;
 
-  authState:any;
+  languages:any[]=[];
 
-  calendarPage:any=CalendarPage;
-  
-  constructor(private firebaseservice:FirebaseService,private modal: ModalController,public event:Events) {
-    this.event.subscribe('user',(user)=> this.authState = user)
-  }
+  location:string;
+    
+  constructor(public event:Events ,platform:Platform ,private translateService:TranslateService) {
+       
+    platform.ready().then(() => {
 
-  login():void{
-    const modalLogin:Modal = this.modal.create('ModalLoginPage');
-    modalLogin.present();
-  }
-  
-  logOut():void{
-    this.firebaseservice.signOut();
+      this.translateService.setDefaultLang('en');
+      this.translateService.use('en');
+
+      console.log(this.translateService.currentLang);
+      this.location = this.translateService.currentLang;
+      
+    });
+
+    this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.location = event.lang;
+    });
+
   }
 
   goRoot(){
@@ -33,5 +39,12 @@ export class HeaderComponent {
   
   ionViewDidLeave(){
     this.event.unsubscribe('user');
+  }
+
+
+  choose(lang){
+
+    this.translateService.use(lang);
+    
   }
 }

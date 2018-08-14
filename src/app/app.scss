@@ -110,3 +110,11 @@ ion-fab[left]{
       border-radius: 20px;
   }
 
+  .cal-event-title {
+    padding: .8rem !important;
+    display: block;
+    background-color: map-get($colors,primary);
+    border-radius: 10px;
+    color: map-get($colors,light) !important;
+    text-decoration: none;
+  }

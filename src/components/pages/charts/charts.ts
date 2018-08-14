@@ -1,7 +1,7 @@
 import { Component ,ChangeDetectionStrategy, ViewChildren, QueryList} from '@angular/core';
 import { NavController,NavParams } from 'ionic-angular';
 import { isWithinRange ,isSameWeek } from 'date-fns';
-import { FirebaseService } from '../../../providers/firebase/firebase.service';
+import { DatabaseProvider } from '../../../providers/database/database';
 import { CalendarEvent } from 'calendar-utils';
 import { convertMinutesToHours } from '../../../app/helpers';
 import { BaseChartDirective }  from 'ng2-charts/ng2-charts';
@@ -45,14 +45,12 @@ export class ChartsPage {
   date:Date;
   
   horarios:CalendarEvent[]=[];
-  
-  dataBaseSubsribe:any;
-
+    
   chartTypeSelected:ChartType;
 
   loadingShow:boolean;
 
-  constructor(private firebaseService:FirebaseService ,
+  constructor(private database:DatabaseProvider ,
               public navCtrl:NavController,
               public navParams:NavParams) {
     
@@ -69,20 +67,30 @@ export class ChartsPage {
   }
 
   ionViewWillEnter(){
-    this.dataBaseSubsribe = this.firebaseService.getHorarios().snapshotChanges().subscribe(item =>{
+
+       this.getHorarios();
+  }
+
+  getHorarios(){
+    this.database.getHorarios().then((data)=>{
       
-      item.forEach((data)=> {
-        this.horarios.push(data.payload.val() as CalendarEvent) 
-      });
+      this.horarios = [];
+      data.forEach((hor)=>{
+        let x = JSON.parse(hor.horario)
+        let horario = Object.assign({},x);
+        horario.start= new Date( x.start );
+        horario.end = new Date( x.end );
+        horario.meta.id = hor.id;
+        
+        this.horarios.push(horario as CalendarEvent);
+
+      })
+      console.log('charts horarios',this.horarios);
       this.updateChartYearHours( this.barChartDataYear );
       this.updateChartWeekHours( this.barChartDataWeek );
       this.updateCharts();
       
-    });
-  }
-
-  ionViewDidLeave(){
-    this.dataBaseSubsribe.unsubscribe();
+    })
   }
 
   updateCharts(){
@@ -181,6 +189,5 @@ export class ChartsPage {
     this.chartType = event.target.value
     
   }
-
   
 }

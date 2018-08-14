@@ -5,7 +5,7 @@ export interface DayType{
     date?:string
   }
 
-  export interface ChartType {
+export interface ChartType {
     id:string;
     value:string;
   }
