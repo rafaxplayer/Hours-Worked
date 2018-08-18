@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy,ChangeDetectorRef,ViewChild } from '
 import { NavController,ActionSheetController,Events,PopoverController,Content } from 'ionic-angular';
 import { CalendarEvent ,DAYS_OF_WEEK } from 'angular-calendar';
 import { Subject } from 'rxjs';
-import { DayTypes ,formatMinutes, convertMinutesToHours, getFormatDate,getFormatHour,getPeriodMsg} from '../../../app/helpers';
 import { isBefore, isEqual, isValid, isWithinRange, isSameDay, differenceInMinutes } from 'date-fns'
 import { ModalController ,Modal} from 'ionic-angular';
 import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
@@ -11,7 +10,7 @@ import { SelectDayTypeComponent } from '../../modal/select-daytype/select-daytyp
 import { DayType } from '../../../interfaces/interfaces';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { TranslateService,LangChangeEvent } from '@ngx-translate/core';
-
+import { HelpersProvider } from '../../../providers/helpers/helpers';
 
 
 @Component({
@@ -59,9 +58,10 @@ export class CalendarPage {
     private dialogsProvider: DialogsProvider, 
     private database:DatabaseProvider,
     private changeref:ChangeDetectorRef,
-    private translate:TranslateService) {
+    private translate:TranslateService,
+    private helper:HelpersProvider) {
       this.date = new Date();
-      this.propsButtonDay = DayTypes[0];
+      this.propsButtonDay = this.helper.DayTypes[0];
       this.viewDate = new Date();
   }
 
@@ -149,6 +149,12 @@ export class CalendarPage {
           handler: () => {
             let modalEdit:Modal = this.modal.create('ModalEditPage',{date:this.viewDate, event:event, id:event.meta.id});
             modalEdit.present();
+            modalEdit.onDidDismiss((isUpdate)=> {
+              if(isUpdate){
+                this.getHorarios();
+              }
+              
+            });
           }
         },
         {
@@ -173,9 +179,9 @@ export class CalendarPage {
 
   openModal(){
 
-    let periodMsg = getPeriodMsg(this.startHorario);
-    let dateModal = getFormatDate(this.date);
-    let hourModal = getFormatHour(this.date,this.startHorario);
+    let periodMsg = this.helper.getPeriodMsg(this.startHorario);
+    let dateModal = this.helper.getFormatDate(this.date);
+    let hourModal = this.helper.getFormatHour(this.date,this.startHorario);
 
     let dataModal = {
       periodtext:periodMsg,
@@ -197,6 +203,7 @@ export class CalendarPage {
           this.horario = this.cleanHorario();
           this.horario.start = this.date;
           this.startHorario = false;
+          this.dialogsProvider.dialogInfo(this.translate.instant('START-SCHEDULE'),this.translate.instant('END-SCHEDULE'),'alertInfo');
         }else{
           
           if(isBefore(this.date, this.horario.start) || isEqual(this.date, this.horario.start)){
@@ -207,19 +214,20 @@ export class CalendarPage {
           this.horario.end = this.date;
           let minutes = differenceInMinutes(this.horario.end, this.horario.start);
           this.horario.meta.minutes = minutes;
-          this.horario.title = `${formatMinutes(minutes)} ${this.translate.instant('WORKED')}`;
+          this.horario.title = `${this.helper.formatMinutes(minutes)} ${this.translate.instant('WORKED')}`;
           
           if(this.checkSchedulesOverlap(this.horario, this.events)){
-            this.dialogsProvider.dialogInfo('Error','Los horarios no se pueden solapar','alertDanger');
+            this.dialogsProvider.dialogInfo('Error',this.translate.instant('SCHEDULE-OVERLAP'),'alertDanger');
             this.startHorario = true;
             return;
           }
 
           this.database.addHorario(this.horario).then((horario)=>{
             
-            this.dialogsProvider.dialogInfo('Guardado','Horario añadido','alertInfo');
+            this.dialogsProvider.dialogInfo(this.translate.instant('SAVED'),this.translate.instant('ADD-SCHEDULE'),'alertInfo');
             this.startHorario = true;
             this.getHorarios();
+
           }).catch(e => console.log(e));
           
         }
@@ -239,7 +247,7 @@ export class CalendarPage {
     });
 
     // print hours worked on panel information
-    this.hoursWorked = `${convertMinutesToHours(totalminutes)} horas trabajadas`;
+    this.hoursWorked = `${this.helper.convertMinutesToHours(totalminutes)} ${this.translate.instant('APP-TITLE')}`;
     
     //view month render...
     if( this.view == 'month' ){
@@ -249,7 +257,7 @@ export class CalendarPage {
           minutes = minutes+event.meta.minutes;
         })
         
-        day.badgeTotal = convertMinutesToHours(minutes);
+        day.badgeTotal = this.helper.convertMinutesToHours(minutes);
         
           let samedata:any = this.dayTypesStored.filter((data) => day.date.toDateString() === data.date);
   
@@ -266,7 +274,7 @@ export class CalendarPage {
     if( this.view =='day' ){
       // button typeday on view day
       let daytypedata:any = this.dayTypesStored.filter((data)=> isSameDay(this.viewDate.toDateString(), data.date));
-      this.propsButtonDay = daytypedata.length > 0 ? JSON.parse(daytypedata[0].daytype) : DayTypes[0];
+      this.propsButtonDay = daytypedata.length > 0 ? JSON.parse(daytypedata[0].daytype) : this.helper.DayTypes[0];
       // detect changes
       this.changeref.detectChanges();
     }
@@ -295,12 +303,12 @@ export class CalendarPage {
     pop.onDidDismiss((data) =>{
       if(data != null){
                           
-          this.database.addFreeDay(this.viewDate, data).then((freeDay)=>{
-            this.propsButtonDay = data;
-            this.refresh.next();
-            this.dialogsProvider.dialogInfo('Ok','Tipo de dia cambiado','alertInfo');
-            this.getFreeDays();
-          }).catch(e => this.dialogsProvider.dialogInfo('Error',e.message,'alertDanger',3000) );
+        this.database.addFreeDay(this.viewDate, data).then((freeDay)=>{
+          this.propsButtonDay = data;
+          this.refresh.next();
+          this.dialogsProvider.dialogInfo('Ok',this.translate.instant('DAYTYPE-CHANGED'),'alertInfo');
+          this.getFreeDays();
+        }).catch(e => this.dialogsProvider.dialogInfo('Error',e.message,'alertDanger',3000) );
       };
     }); 
     pop.present();
@@ -323,7 +331,7 @@ export class CalendarPage {
   }
 
   deleteFreeDays(){
-    this.dialogsProvider.dialogConfirm('Eliminar festivos','Se eliminaran todos los dias marcados como fiesta o vacaciones de este mes, ¿Estas de acuerdo?','alertDanger',true)
+    this.dialogsProvider.dialogConfirm('Eliminar festivos',this.translate.instant('DELETE-FREE-DAYS'),'alertDanger',true)
         .then((ret)=>{
           if(ret){
             this.database.removeFreeDays();
@@ -337,6 +345,5 @@ export class CalendarPage {
     this.view = view;
     this.changeref.detectChanges();
   }
-
   
 }

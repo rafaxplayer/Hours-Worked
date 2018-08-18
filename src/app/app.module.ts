@@ -10,6 +10,9 @@ import { HeaderComponent } from '../components/header/header';
 //popover
 import { SelectDayTypeComponent } from '../components/modal/select-daytype/select-daytype';
 
+//Pipes
+import { LocalizedDatePipe } from '../pipes/localizedDate.pipe';
+import { LocalizedDayTypePipe } from '../pipes/localizedDayType.pipe';
 //native
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -18,6 +21,7 @@ import { SQLite } from '@ionic-native/sqlite';
 //Providers
 import { DialogsProvider } from '../providers/dialogs/dialogs.service';
 import { DatabaseProvider } from '../providers/database/database';
+import { HelpersProvider } from '../providers/helpers/helpers';
 
 //Animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,6 +42,7 @@ import localeEs from '@angular/common/locales/es';
 import localeEn from '@angular/common/locales/en';
 import { registerLocaleData } from '../../node_modules/@angular/common';
 
+
 registerLocaleData(localeEs)
 registerLocaleData(localeEn)
 
@@ -51,7 +56,9 @@ export function setTranslateLoader(http: HttpClient) {
     CalendarPage,
     HeaderComponent,
     ChartsPage,
-    SelectDayTypeComponent
+    SelectDayTypeComponent,
+    LocalizedDatePipe,
+    LocalizedDayTypePipe
   ],
   imports: [
     BrowserModule,
@@ -81,7 +88,8 @@ export function setTranslateLoader(http: HttpClient) {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DialogsProvider,
     DatabaseProvider,
-    SQLite
+    SQLite,
+    HelpersProvider
   ]
 })
 export class AppModule {}

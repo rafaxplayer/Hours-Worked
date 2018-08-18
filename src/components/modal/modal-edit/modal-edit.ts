@@ -2,11 +2,11 @@ import { Component, ChangeDetectionStrategy} from '@angular/core';
 import { IonicPage,NavParams,ViewController,ModalController,Modal } from 'ionic-angular';
 import { CalendarEvent} from 'angular-calendar';
 import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
-import { formatMinutes, getFormatDate,getFormatHour,getPeriodMsg} from '../../../app/helpers';
 import { isValid,isBefore,isEqual, differenceInMinutes } from 'date-fns'
 import { Subject } from 'rxjs';
 import { DatabaseProvider } from '../../../providers/database/database';
-
+import { TranslateService } from '@ngx-translate/core';
+import { HelpersProvider } from '../../../providers/helpers/helpers';
 
 
 @IonicPage()
@@ -29,7 +29,9 @@ export class ModalEditPage {
     public navParams: NavParams,
     private dialogsProvider:DialogsProvider,
     private modalCtrl:ModalController,
-    private database:DatabaseProvider) {
+    private database:DatabaseProvider,
+    private translateService:TranslateService,
+    private helpers:HelpersProvider) {
 
     this.viewDate = this.navParams.get('date');
     this.event = this.navParams.get('event');
@@ -39,7 +41,6 @@ export class ModalEditPage {
        
     
   }
-
   
   hour_clicked(event){
     this.date = new Date(event.date);
@@ -52,9 +53,9 @@ export class ModalEditPage {
 
   openModalDate(){
 
-    let periodMsg = getPeriodMsg(this.startPeriod);
-    let dateModal = getFormatDate(this.date);
-    let hourModal = getFormatHour(this.date,this.startPeriod);
+    let periodMsg = this.helpers.getPeriodMsg(this.startPeriod);
+    let dateModal = this.helpers.getFormatDate(this.date);
+    let hourModal = this.helpers.getFormatHour(this.date,this.startPeriod);
 
     let dataModal = {
       periodtext:periodMsg,
@@ -69,35 +70,33 @@ export class ModalEditPage {
       if(data.isValid){
 
         if(!isValid(this.date)){
-          this.dialogsProvider.dialogInfo('Error','El horario no es valido','alertDanger');
+          this.dialogsProvider.dialogInfo('Error',this.translateService.instant('INVALID-SCHEDULE'),'alertDanger');
           return;
         }
 
         if(this.startPeriod){
           this.event.start = this.date;
           this.startPeriod = false;
+          this.dialogsProvider.dialogInfo(this.translateService.instant('START-SCHEDULE'),this.translateService.instant('END-SCHEDULE'),'alertInfo');
         }else{
 
           if(isBefore(this.date,this.event.start) || isEqual(this.date,this.event.start)){
-            this.dialogsProvider.dialogInfo('Error','El fin del horario no puede ser igual o antes del inicio de horario','alertDanger');
+            this.dialogsProvider.dialogInfo('Error',this.translateService.instant('SCHEDULE-END-OVERLAP'),'alertDanger');
             return;
           }
 
           this.event.end = this.date;
           let minutes = differenceInMinutes(this.event.end,this.event.start);
           this.event.meta.minutes = minutes;
-          this.event.title = `${formatMinutes(minutes)} trabajados`;
-          console.log('fininsh event',this.event);
-          
+          this.event.title = `${this.helpers.formatMinutes(minutes)} trabajados`;
+                    
           this.events.push(this.event);  
           this.refresh.next();
           this.startPeriod=true;
-          this.dialogsProvider.dialogConfirm('Ok','Horario creado,¿Quieres guardarlo asi?','alertInfo',false)
+          this.dialogsProvider.dialogConfirm('Ok',this.translateService.instant('SCHEDULE-CONFIRM'),'alertInfo',false)
               .then((ret)=>{
                 if(ret){
-                  /* this.firebaseService.updateHorario(this.event).then(()=>{
-                    this.viewCtrl.dismiss({ isUpdate:true });
-                  }); */
+                  
                   this.database.updateHorario(this.event).then(()=>{
                     this.viewCtrl.dismiss({ isUpdate:true });
                   })

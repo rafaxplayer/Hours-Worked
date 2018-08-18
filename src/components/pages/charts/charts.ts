@@ -3,10 +3,10 @@ import { NavController,NavParams } from 'ionic-angular';
 import { isWithinRange ,isSameWeek } from 'date-fns';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { CalendarEvent } from 'calendar-utils';
-import { convertMinutesToHours } from '../../../app/helpers';
 import { BaseChartDirective }  from 'ng2-charts/ng2-charts';
 import { ChartType } from '../../../interfaces/interfaces';
-
+import { TranslateService } from '@ngx-translate/core';
+import { HelpersProvider } from '../../../providers/helpers/helpers';
 
 @Component({
   selector: 'charts-page',
@@ -26,20 +26,20 @@ export class ChartsPage {
   
    barChartLegend:boolean = true;
 
-   barChartLabelsYear:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+   barChartLabelsYear:string[] = this.translateService.instant('MONTHS');
 
-   barChartLabelsWeek:string[] = ['Domingo', 'Lunes','Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-  
+   barChartLabelsWeek:string[] = this.translateService.instant('DAYS-WEEK');
+
    chartTypes:ChartType[];
 
    barChartDataYear:Array<any> = [
-    {data:[], label:'Horas este año'},
-    {data:[], label:'Horas año anterior'}
+    {data:[], label:this.translateService.instant('HOURS-THIS-YEAR')},
+    {data:[], label:this.translateService.instant('HOURS-PREV-YEAR')}
   ];
 
    barChartDataWeek:Array<any> = [
-    {data:[], label:'Horas esta semana'},
-    {data:[], label:'Horas semana anterior'}
+    {data:[], label:this.translateService.instant('HOURS-THIS-WEEK')},
+    {data:[], label:this.translateService.instant('HOURS-PREV-WEEK')}
   ];
 
   date:Date;
@@ -52,7 +52,9 @@ export class ChartsPage {
 
   constructor(private database:DatabaseProvider ,
               public navCtrl:NavController,
-              public navParams:NavParams) {
+              public navParams:NavParams,
+              private translateService:TranslateService,
+              private helpers:HelpersProvider) {
     
     this.chartTypes = [{id:'bar',value:'Bars'},{id:'line',value:'Line'},{id:'pie',value:'Pie'},{id:'radar',value:'Radar'},{id:'doughnut',value:'Doughnut'}]
 
@@ -85,7 +87,7 @@ export class ChartsPage {
         this.horarios.push(horario as CalendarEvent);
 
       })
-      console.log('charts horarios',this.horarios);
+      
       this.updateChartYearHours( this.barChartDataYear );
       this.updateChartWeekHours( this.barChartDataWeek );
       this.updateCharts();
@@ -114,7 +116,6 @@ export class ChartsPage {
   
   }
  
-
   getMonthHours(data:CalendarEvent[],month:number,year:number):number{
 
     let minutes = 0;
@@ -129,7 +130,7 @@ export class ChartsPage {
 
       })
     }
-    return convertMinutesToHours(minutes);
+    return this.helpers.convertMinutesToHours(minutes);
 
   }
 
@@ -159,7 +160,7 @@ export class ChartsPage {
         minutes = minutes + data.meta.minutes;
       })
     }
-    return convertMinutesToHours(minutes);
+    return this.helpers.convertMinutesToHours(minutes);
   }
  
   getRangePreviousWeek(date:Date):any{

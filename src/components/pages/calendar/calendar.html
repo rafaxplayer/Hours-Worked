@@ -46,7 +46,7 @@
                 <ion-item>
                     <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>{{ 'WORKED' | translate }} </div>
                     <div class="color-days"> <span class="free"></span>{{ 'FREE' | translate }}</div>
-                    <div class="color-days"> <span class="holidays"></span>{{ 'HOLIDAY' | translate }}</div>
+                    <div class="color-days"> <span class="holidays"></span>{{ 'HOLIDAYS' | translate }}</div>
                 </ion-item>
             </ion-card>
         </ion-col>
@@ -54,7 +54,7 @@
             <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="view = 'month'"><ion-icon name="calendar"></ion-icon> {{ 'MONTH' | translate }}</button>
             <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'" (click)="view = 'week'"><ion-icon name="calendar"></ion-icon> {{ 'WEEK' | translate }}</button>
             <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> {{ 'DELETE-FREE' | translate }}</button>
-            <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.label }}</button>
+            <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay | localizedDayType }}</button>
         </ion-col>
     </ion-row>
     <div [ngSwitch]="view">
