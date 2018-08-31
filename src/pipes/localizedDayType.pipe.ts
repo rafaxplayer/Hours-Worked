@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DayType } from '../interfaces/interfaces';
 
 @Pipe({
   name: 'localizedDayType',
@@ -11,9 +10,10 @@ export class LocalizedDayTypePipe implements PipeTransform {
   constructor(private translateService: TranslateService) {
   }
 
-  transform(daytype:DayType):string {
+  transform(value:string): string {
    
-    return this.translateService.instant(daytype.value.toUpperCase())
+    return this.translateService.instant(`${value.toUpperCase()}`)
+    
   }
 
 }

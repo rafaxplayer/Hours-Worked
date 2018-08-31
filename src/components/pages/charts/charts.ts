@@ -5,8 +5,9 @@ import { DatabaseProvider } from '../../../providers/database/database';
 import { CalendarEvent } from 'calendar-utils';
 import { BaseChartDirective }  from 'ng2-charts/ng2-charts';
 import { ChartType } from '../../../interfaces/interfaces';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService,LangChangeEvent } from '@ngx-translate/core';
 import { HelpersProvider } from '../../../providers/helpers/helpers';
+import { Subscription } from '../../../../node_modules/rxjs';
 
 @Component({
   selector: 'charts-page',
@@ -28,18 +29,20 @@ export class ChartsPage {
 
    barChartLabelsYear:string[] = this.translateService.instant('MONTHS');
 
-   barChartLabelsWeek:string[] = this.translateService.instant('DAYS-WEEK');
+   barChartLabelsWeek:string[] = this.translateService.instant('DAYSWEEK');
 
    chartTypes:ChartType[];
 
-   barChartDataYear:Array<any> = [
-    {data:[], label:this.translateService.instant('HOURS-THIS-YEAR')},
-    {data:[], label:this.translateService.instant('HOURS-PREV-YEAR')}
+  translateObserver:Subscription;
+   
+  barChartDataYear:Array<any> = [
+    {data:[], label:this.translateService.instant('HOURS_THIS_YEAR')},
+    {data:[], label:this.translateService.instant('HOURS_PREV_YEAR')}
   ];
-
-   barChartDataWeek:Array<any> = [
-    {data:[], label:this.translateService.instant('HOURS-THIS-WEEK')},
-    {data:[], label:this.translateService.instant('HOURS-PREV-WEEK')}
+  
+  barChartDataWeek:Array<any> = [
+    {data:[], label:this.translateService.instant('HOURS_THIS_WEEK')},
+    {data:[], label:this.translateService.instant('HOURS_PREV_WEEK')}
   ];
 
   date:Date;
@@ -65,12 +68,23 @@ export class ChartsPage {
     if(navParams.data){
       this.date = navParams.data.date;
     }
-    
+      
+    this.translateObserver = this.translateService.onLangChange.subscribe((event :LangChangeEvent)=>{
+      
+      this.barChartLabelsYear = event.translations.MONTHS;
+      this.barChartLabelsWeek = event.translations.DAYSWEEK;
+
+      this.barChartDataYear[0].label= event.translations.HOURS_THIS_YEAR;
+      this.barChartDataYear[0].label= event.translations.HOURS_PREV_YEAR;
+
+      this.barChartDataWeek[0].label= event.translations.HOURS_THIS_WEEK;
+      this.barChartDataWeek[0].label= event.translations.HOURS_PREV_WEEK;
+     }) 
+
   }
 
   ionViewWillEnter(){
-
-       this.getHorarios();
+    this.getHorarios();
   }
 
   getHorarios(){
@@ -100,6 +114,7 @@ export class ChartsPage {
   }
 
   updateChartYearHours(dataChartYear:Array<any>){
+
     for( let i = 0; i < 12; i++ ){ 
       dataChartYear[0].data.push(this.getMonthHours(this.horarios, i, this.date.getFullYear())); 
       dataChartYear[1].data.push(this.getMonthHours(this.horarios, i, this.date.getFullYear()-1));
@@ -108,10 +123,10 @@ export class ChartsPage {
   }
 
   updateChartWeekHours(dataChartWeek:Array<any>){
+
     for( let i=0; i < 7; i++){ 
       dataChartWeek[0].data.push(this.getDayHoursofThisWeek(this.horarios, i, this.date.getFullYear(), true)); 
       dataChartWeek[1].data.push(this.getDayHoursofThisWeek(this.horarios, i, this.date.getFullYear(), false)); 
-    
     }
   
   }
@@ -127,7 +142,6 @@ export class ChartsPage {
     if(thisMonth){
       thisMonth.map(data=>{
         minutes = minutes + data.meta.minutes;
-
       })
     }
     return this.helpers.convertMinutesToHours(minutes);
@@ -142,15 +156,15 @@ export class ChartsPage {
 
       const itemDate = new Date( item.start );
       let range = this.getRangePreviousWeek( this.date );
-
+  
       if(isThis){
-
+  
           return  itemDate.getDay() == dayofWeek && isSameWeek( itemDate, this.date  );
-
+  
       }else{
-       
-        return itemDate.getDay() == dayofWeek && isWithinRange( itemDate , range.first, range.last ) && itemDate.getFullYear() == year;
-      
+         
+          return itemDate.getDay() == dayofWeek && isWithinRange( itemDate , range.first, range.last ) && itemDate.getFullYear() == year;
+        
       }
       
     });
@@ -172,12 +186,13 @@ export class ChartsPage {
     date.setMinutes(0);
     date.setSeconds(0);
     let dummy =  date.getDay();
-    //console.log(date);
+    
     dummy = dummy + 6;
+    
     prevDatesWeek.first = date.setDate(date.getDate() - dummy );
-    //console.log("previous week first day : "+ date);
+    
     prevDatesWeek.last = date.setDate(date.getDate() + 6);
-    //console.log("previous week lastday : "+ date);
+    
     return prevDatesWeek;
 
   }
@@ -190,5 +205,8 @@ export class ChartsPage {
     this.chartType = event.target.value
     
   }
-  
+
+  ionViewWillUnload(){
+    this.translateObserver.unsubscribe();
+  }
 }

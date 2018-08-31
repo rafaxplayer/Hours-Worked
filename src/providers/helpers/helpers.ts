@@ -32,9 +32,9 @@ export class HelpersProvider {
      
     getPeriodMsg(startPeriod:boolean):string{
       if(startPeriod){
-        return this.translateService.instant('START-OF-WORK');
+        return this.translateService.instant('START_OF_WORK');
       }else{
-        return this.translateService.instant('END-OF-WORK');;
+        return this.translateService.instant('END_OF_WORK');;
       }
     }
   
@@ -56,7 +56,7 @@ export class HelpersProvider {
     }
   
    DayTypes:DayType[] = [
-    { label:'Trabajado',value:'worked',color:'whiteday' },
+    { label:'Trabajados',value:'worked',color:'whiteday' },
     { label:'Fiesta',value:'free',color:'greenday' },
     { label:'Vacaciones',value:'holidays',color:'blueday' }
   ]

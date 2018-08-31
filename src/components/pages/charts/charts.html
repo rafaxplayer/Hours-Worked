@@ -12,11 +12,12 @@
   </ion-row>
   <div class="charts-wraped">
     <div class="chart">
-        <h2 text-center>{{ 'HOURS-WORKED-WEEK' | translate }} {{ date | localizedDate: 'd MMMM y' }}</h2>
+        <h2 text-center>{{ 'HOURS_WORKED_WEEK' | translate }} {{ date | localizedDate: 'd MMMM y' }}</h2>
         <canvas baseChart [datasets]="barChartDataWeek" [labels]="barChartLabelsWeek" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
     </div>
+    
     <div class="chart">
-        <h2 text-center>{{ 'HOURS-WORKED-YEAR' | translate}} {{ date | localizedDate: 'y'}} </h2>
+        <h2 text-center>{{ 'HOURS_WORKED_YEAR' | translate}} {{ date | localizedDate: 'y'}} </h2>
         <canvas baseChart [datasets]="barChartDataYear" [labels]="barChartLabelsYear" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
     </div>
 </div>

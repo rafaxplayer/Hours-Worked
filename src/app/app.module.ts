@@ -2,18 +2,21 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
-//components & Pages
+//Components & Pages
 import { AppComponent } from './app.component';
 import { CalendarPage, ChartsPage } from '../components/pages/pages.index';
 import { HeaderComponent } from '../components/header/header';
+import { ModalEditComponent } from '../components/modal/modal-edit/modal-edit';
+import { ModalDateComponent } from '../components/modal/modal-date/modal-date';
 
-//popover
+//Popover
 import { SelectDayTypeComponent } from '../components/modal/select-daytype/select-daytype';
 
 //Pipes
 import { LocalizedDatePipe } from '../pipes/localizedDate.pipe';
-import { LocalizedDayTypePipe } from '../pipes/localizedDayType.pipe';
-//native
+import { LocalizedDayTypePipe} from '../pipes/localizedDayType.pipe';
+
+//Native
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
@@ -58,7 +61,9 @@ export function setTranslateLoader(http: HttpClient) {
     ChartsPage,
     SelectDayTypeComponent,
     LocalizedDatePipe,
-    LocalizedDayTypePipe
+    LocalizedDayTypePipe,
+    ModalEditComponent,
+    ModalDateComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +86,8 @@ export function setTranslateLoader(http: HttpClient) {
     CalendarPage,
     ChartsPage,
     SelectDayTypeComponent,
+    ModalEditComponent,
+    ModalDateComponent 
   ],
   providers: [
     StatusBar,

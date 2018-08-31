@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, ViewController} from 'ionic-angular';
+import { NavParams, ViewController} from 'ionic-angular';
 
-@IonicPage()
 @Component({
-  selector: 'page-modal-date',
+  selector: 'modal-date',
   templateUrl: 'modal-date.html',
 })
-export class ModalDatePage {
+export class ModalDateComponent {
   
   public data:any;
 

@@ -1,6 +1,4 @@
-
 <ion-content ion-grid padding class="has-header">
-   
     <!--  Fab Buttons -->
     <ion-fab bottom right>
             <button ion-fab color="secondary" [navPush]="chartsPage" [navParams]="{date:viewDate}"><ion-icon name="podium"></ion-icon></button>
@@ -35,13 +33,13 @@
                     <ion-card-title>
                         {{ viewDate | date: 'd MMMM y' }}
                     </ion-card-title>
-                    <p><ion-icon name="ios-time-outline"></ion-icon> {{ hoursWorked }}</p>
+                    <p><ion-icon name="ios-time-outline"></ion-icon> {{ hoursWorked }} {{ 'APP_TITLE' | translate }}</p>
                 </ion-card-content>
             </ion-card>
             <ion-card padding *ngIf="view=='month'">
                 <ion-item>
-                    <p><strong>TP</strong> {{ 'TURN-FOLLOWED' | translate }}.</p>
-                    <p><strong>TS</strong> {{ 'MATCH-TURN' | translate }}.</p>
+                    <p><strong>TP</strong> {{ 'TURN_FOLLOWED' | translate }}.</p>
+                    <p><strong>TS</strong> {{ 'MATCH_TURN' | translate }}.</p>
                 </ion-item>
                 <ion-item>
                     <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>{{ 'WORKED' | translate }} </div>
@@ -49,12 +47,12 @@
                     <div class="color-days"> <span class="holidays"></span>{{ 'HOLIDAYS' | translate }}</div>
                 </ion-item>
             </ion-card>
-        </ion-col>
+            </ion-col>
         <ion-col col-12 col-md-4>
             <button ion-button outline icon-start *ngIf="view == 'day' || view =='week'"  (click)="view = 'month'"><ion-icon name="calendar"></ion-icon> {{ 'MONTH' | translate }}</button>
             <button ion-button color="danger" icon-start *ngIf="view == 'day' || view == 'month'" (click)="view = 'week'"><ion-icon name="calendar"></ion-icon> {{ 'WEEK' | translate }}</button>
-            <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> {{ 'DELETE-FREE' | translate }}</button>
-            <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay | localizedDayType }}</button>
+            <button ion-button color="danger" icon-start *ngIf="view == 'month'" (click)="deleteFreeDays()"><ion-icon name="trash"></ion-icon> {{ 'DELETE_FREE' | translate }}</button>
+            <button ion-button icon-start *ngIf="view == 'day'" [color]="propsButtonDay.color" (click)="showMenuFreeDays($event)"><ion-icon name="more"></ion-icon>{{ propsButtonDay.value | localizedDayType }}</button>
         </ion-col>
     </ion-row>
     <div [ngSwitch]="view">

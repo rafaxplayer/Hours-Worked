@@ -1,17 +1,18 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 
 @Injectable()
 export class DialogsProvider {
 
-  constructor(public alertCtrl:AlertController) {}
+  constructor(public alertCtrl:AlertController,private translateService:TranslateService) {}
 
   dialogInfo(title:string,message:string,cClass:string,time?:number,BackdropDismiss:boolean = true){
 
     let alrtInfo = this.alertCtrl.create({
       title: title,
       message: message,
-      buttons: ['Cerrar'],
+      buttons: [this.translateService.instant('CLOSE')],
       cssClass:'alert ' + cClass,
       enableBackdropDismiss:BackdropDismiss
     });
@@ -31,11 +32,11 @@ export class DialogsProvider {
         message: message,
         buttons: [
           {
-            text: 'Si',
+            text: this.translateService.instant('YES'),
             handler: ()=>{ alrtConfirm.dismiss().then(()=>resolve(true)); return false; }
           },
           {
-            text: 'No',
+            text: this.translateService.instant('CANCEL'),
             handler: () => { alrtConfirm.dismiss().then(()=>resolve(false)) ; return false}
           }
         ],

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ 'EDIT-SCHEDULE' | translate }}</ion-title>
+    <ion-title>{{ 'EDIT_SCHEDULE' | translate }}</ion-title>
     <ion-buttons end>
         <button ion-button (click)="closeModal()">Close</button>
     </ion-buttons>
@@ -8,8 +8,8 @@
 </ion-header>
 <ion-content padding>
   <ion-row padding text-center>
-    <strong>{{ viewDate | date: 'd MMMM y' }}</strong>
+    <strong>{{ viewDate | localizedDate: 'd MMMM y' }}</strong>
   </ion-row>
-    <p>{{ 'SELECT-EDIT-SCHEDULE' | translate }}</p>
+      <p>{{ 'SELECT_EDIT_SCHEDULE' | translate }}</p>
   <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [hourSegments]="4" [refresh]="refresh" (hourSegmentClicked)="hour_clicked($event)"></mwl-calendar-day-view>
 </ion-content>

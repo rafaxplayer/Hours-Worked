@@ -57,7 +57,7 @@ export class DatabaseProvider {
         return this.database.executeSql(
         `CREATE TABLE IF NOT EXISTS dialibre (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          date TEXT,
+          date TEXT UNIQUE,
           daytype TEXT
           );`,[] )
     }).catch((err)=>console.log("error detected creating tables", err));
@@ -147,7 +147,7 @@ export class DatabaseProvider {
       console.log(date.toDateString());
       console.log(data);
       
-      return this.database.executeSql(`INSERT INTO dialibre ( date, daytype) VALUES ('${date.toDateString()}' ,'${JSON.stringify(data)}');`, [])
+      return this.database.executeSql(`REPLACE INTO dialibre ( date, daytype) VALUES ('${date.toDateString()}' ,'${JSON.stringify(data)}');`, [])
         .then((result)=>{
           if(result.insertId){
             return this.getFreeDay(result.insertId);
