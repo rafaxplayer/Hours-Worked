@@ -1,3 +1,5 @@
 modal-edit {
-    
+    .toolbar-background-md{
+        background-color: map-get($colors, header-color) !important;
+    }
 }

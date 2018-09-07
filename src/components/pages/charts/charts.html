@@ -1,25 +1,33 @@
 <ion-content padding class="has-header">
-    
+
     <ion-fab bottom left>
         <button ion-fab color="secondary" navPop><ion-icon name="arrow-back"></ion-icon></button>
     </ion-fab>
-  <ion-row class="navigation">
-    
-      <select ([ngModel])="chartTypeSelected.value" (change)="chartChange($event)" class="select-type">
-          <option selected style="display:none">Char type</option>
-          <option *ngFor="let type of chartTypes" [value]="type.id">{{type.value}}</option>
-      </select>
-  </ion-row>
-  <div class="charts-wraped">
-    <div class="chart">
-        <h2 text-center>{{ 'HOURS_WORKED_WEEK' | translate }} {{ date | localizedDate: 'd MMMM y' }}</h2>
-        <canvas baseChart [datasets]="barChartDataWeek" [labels]="barChartLabelsWeek" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
-    </div>
-    
-    <div class="chart">
-        <h2 text-center>{{ 'HOURS_WORKED_YEAR' | translate}} {{ date | localizedDate: 'y'}} </h2>
-        <canvas baseChart [datasets]="barChartDataYear" [labels]="barChartLabelsYear" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="chartType"></canvas>
-    </div>
-</div>
-</ion-content>
+    <ion-row class="navigation">
 
+        <select ([ngModel])="chartTypeSelected.value" (change)="chartChange($event)" class="select-type">
+            <option selected style="display:none">Char type</option>
+            <option *ngFor="let type of chartTypes" [value]="type.id">{{type.value}}</option>
+        </select>
+    </ion-row>
+    <div class="charts-wraped">
+        <div class="chart">
+            <h2 text-center>{{ allHoursWeek }} {{ 'HOURS_WORKED_WEEK' | translate }} {{ date | localizedDate: 'd MMMM y'
+                }}</h2>
+            <canvas baseChart [datasets]="barChartDataWeek" [labels]="barChartLabelsWeek" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="chartType"></canvas>
+        </div>
+
+        <div class="chart">
+            <h2 text-center>{{ allHoursMonth }} {{ 'HOURS_WORKED_MONTH' | translate }} {{ date | localizedDate: 'MMMM' }}</h2>
+            <canvas baseChart [datasets]="barChartDataMonth" [labels]="barChartLabelsMonth" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="chartType"></canvas>
+        </div>
+
+        <div class="chart">
+            <h2 text-center>{{ allHoursYear }} {{ 'HOURS_WORKED_YEAR' | translate}} {{ date | localizedDate: 'y'}} </h2>
+            <canvas baseChart [datasets]="barChartDataYear" [labels]="barChartLabelsYear" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="chartType"></canvas>
+        </div>
+    </div>
+</ion-content>

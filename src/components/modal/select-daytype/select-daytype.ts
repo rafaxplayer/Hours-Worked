@@ -18,29 +18,29 @@ import { HelpersProvider } from '../../../providers/helpers/helpers';
 })
 export class SelectDayTypeComponent {
 
-  dayTypes:DayType[] = this.helpers.DayTypes;
-  
-  selectionDayType:DayType; 
+  dayTypes: DayType[] = this.helpers.DayTypes;
 
-  date:Date;
-  
-  constructor(public navParams:NavParams,
-              private viewCtrl:ViewController,
-              private helpers:HelpersProvider) {
+  selectionDayType: DayType;
 
-    if(this.navParams.data){
-      
+  date: Date;
+
+  constructor(public navParams: NavParams,
+    private viewCtrl: ViewController,
+    private helpers: HelpersProvider) {
+
+    if (this.navParams.data) {
+
       this.date = this.navParams.data.date;
-      this.selectionDayType = this.dayTypes.filter((dayType)=> dayType.value == this.navParams.data.dayType.value)[0];
-              
+      this.selectionDayType = this.dayTypes.filter((dayType) => dayType.value == this.navParams.data.dayType.value)[0];
+
     }
-    
-  }
-  
-  closePopover(day:DayType){
-            
-      this.viewCtrl.dismiss(day);
+
   }
 
-  
+  closePopover(day: DayType) {
+
+    this.viewCtrl.dismiss(day);
+  }
+
+
 }

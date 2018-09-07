@@ -5,27 +5,27 @@ import { AlertController } from 'ionic-angular';
 @Injectable()
 export class DialogsProvider {
 
-  constructor(public alertCtrl:AlertController,private translateService:TranslateService) {}
+  constructor(public alertCtrl: AlertController, private translateService: TranslateService) { }
 
-  dialogInfo(title:string,message:string,cClass:string,time?:number,BackdropDismiss:boolean = true){
+  dialogInfo(title: string, message: string, cClass: string, time?: number, BackdropDismiss: boolean = true) {
 
     let alrtInfo = this.alertCtrl.create({
       title: title,
       message: message,
       buttons: [this.translateService.instant('CLOSE')],
-      cssClass:'alert ' + cClass,
-      enableBackdropDismiss:BackdropDismiss
+      cssClass: 'alert ' + cClass,
+      enableBackdropDismiss: BackdropDismiss
     });
-    if(time){
-      setTimeout(()=>{alrtInfo.dismiss()},time);
+    if (time) {
+      setTimeout(() => { alrtInfo.dismiss() }, time);
     }
     alrtInfo.present();
 
   }
 
-  dialogConfirm(title:string,message:string,cClass:string,BackdropDismiss:boolean = true):Promise<any>{
+  dialogConfirm(title: string, message: string, cClass: string, BackdropDismiss: boolean = true): Promise<any> {
 
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve, reject) => {
 
       let alrtConfirm = this.alertCtrl.create({
         title: title,
@@ -33,15 +33,15 @@ export class DialogsProvider {
         buttons: [
           {
             text: this.translateService.instant('YES'),
-            handler: ()=>{ alrtConfirm.dismiss().then(()=>resolve(true)); return false; }
+            handler: () => { alrtConfirm.dismiss().then(() => resolve(true)); return false; }
           },
           {
             text: this.translateService.instant('CANCEL'),
-            handler: () => { alrtConfirm.dismiss().then(()=>resolve(false)) ; return false}
+            handler: () => { alrtConfirm.dismiss().then(() => resolve(false)); return false }
           }
         ],
-        cssClass:'alert ' + cClass,
-        enableBackdropDismiss:BackdropDismiss
+        cssClass: 'alert ' + cClass,
+        enableBackdropDismiss: BackdropDismiss
       });
       alrtConfirm.present();
 

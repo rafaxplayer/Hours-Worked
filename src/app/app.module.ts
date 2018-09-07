@@ -2,6 +2,9 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
+//Storage
+import { IonicStorageModule } from '@ionic/storage';
+
 //Components & Pages
 import { AppComponent } from './app.component';
 import { CalendarPage, ChartsPage } from '../components/pages/pages.index';
@@ -20,6 +23,7 @@ import { LocalizedDayTypePipe} from '../pipes/localizedDayType.pipe';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
+import { DatePicker } from '@ionic-native/date-picker';
 
 //Providers
 import { DialogsProvider } from '../providers/dialogs/dialogs.service';
@@ -77,6 +81,7 @@ export function setTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    IonicStorageModule.forRoot(),
     BrowserAnimationsModule,
     ChartsModule
   ],
@@ -96,7 +101,8 @@ export function setTranslateLoader(http: HttpClient) {
     DialogsProvider,
     DatabaseProvider,
     SQLite,
-    HelpersProvider
+    HelpersProvider,
+    DatePicker
   ]
 })
 export class AppModule {}

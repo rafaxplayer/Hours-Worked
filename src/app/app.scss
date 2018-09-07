@@ -1,24 +1,9 @@
-// http://ionicframework.com/docs/theming/
 
-
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
 .has-header
 {
    top: 82px;//your headers height
    .scroll-content{
-    margin-bottom: 6rem
+        margin-bottom: 6rem
    }
    
 }
@@ -34,19 +19,16 @@
         background-color:white !important;
         color: black !important;
         .alert-head{
-            background-color: map-get($colors,primary) !important;
+            background-color: map-get($colors, header-color) !important;
             color:white;
-           
         }
     }
     
     .alert-message{
-        
         color: #333 !important;
-        
     }
     button{
-        color:map-get($colors,primary) !important;
+        color:map-get($colors, primary) !important;
     }
 }
 
@@ -54,20 +36,18 @@
     .alert-wrapper{
         .alert-head{
             background-color: black !important;
-            color:white;
-                        
+            color:map-get($colors , light );
         }
         background-color:#333 !important;
-        color: red !important;
+        color:map-get($colors , danger ) !important;
     }
     
     .alert-message{
-        
         color: white !important;
-        
     }
+
     button{
-        color:map-get($colors,danger)!important;
+        color:map-get($colors, danger)!important;
     }
 }
 
@@ -87,12 +67,15 @@
     }
    
 }
+
 ion-fab[bottom]{
     bottom:120px;
 }
+
 ion-fab[right]{
     right:3rem;
 }
+
 ion-fab[left]{
     left:3rem;
 }
@@ -100,21 +83,22 @@ ion-fab[left]{
 // Applied by the showWhen directive
 .hidden-show-when {
     display: none !important;
-  }
+}
   
-  // Applied by the hideWhen directive
-  .hidden-hide-when {
+// Applied by the hideWhen directive
+.hidden-hide-when {
     display: none !important;
-  }
-  .button{
-      border-radius: 20px;
-  }
+}
 
-  .cal-event-title {
+.button{
+    border-radius: 20px;
+}
+
+.cal-event-title {
     padding: .8rem !important;
     display: block;
-    background-color: map-get($colors,primary);
+    background-color: map-get($colors, primary);
     border-radius: 10px;
-    color: map-get($colors,light) !important;
+    color: map-get($colors, light) !important;
     text-decoration: none;
-  }
+}

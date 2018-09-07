@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header >
     <ion-navbar>
         <ion-title>{{ data.periodtext }}</ion-title>
         <ion-buttons end>
@@ -11,5 +11,5 @@
         <strong>{{ data.date }}</strong>
         <span>{{ data.hour }}</span>
     </div>
-    <button ion-button block (click)="save()"> Save</button>
+    <button ion-button block (click)="save()"> {{ 'SAVE' | translate }}</button>
 </ion-content>

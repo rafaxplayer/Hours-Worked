@@ -1,10 +1,9 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color='header-color'>
         <img width="50px" height="50px" src="assets/imgs/logo.png" alt="hours worked logo">
         <ion-title (click)="goRoot()">
-            {{ 'APP_TITLE' | translate}}
+            HOURS <span>WORKED</span>
         </ion-title>
-
         <ion-select [(ngModel)]="location" (ionChange)="choose($event)">
             <ion-option value="es" selected="'es' == location">
                 {{ 'SPANISH' | translate }}
@@ -14,5 +13,4 @@
             </ion-option>
           </ion-select>
     </ion-navbar>
-    
 </ion-header>

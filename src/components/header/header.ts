@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { Platform ,Events} from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { CalendarPage } from '../pages/calendar/calendar';
-import { TranslateService, LangChangeEvent} from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'header',
   templateUrl: 'header.html'
 })
 export class HeaderComponent {
- 
-  calendarPage:any = CalendarPage;
 
-  languages:any[]=[];
+  calendarPage: any = CalendarPage;
 
-  location:string;
-    
-  constructor(public event:Events ,platform:Platform ,private translateService:TranslateService) {
-       
+  languages: any[] = [];
+
+  location: string;
+
+  constructor(public event: Events, platform: Platform, private translateService: TranslateService) {
+
     platform.ready().then(() => {
 
       this.translateService.setDefaultLang('en');
@@ -24,7 +24,7 @@ export class HeaderComponent {
 
       console.log(this.translateService.currentLang);
       this.location = this.translateService.currentLang;
-      
+
     });
 
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -33,18 +33,18 @@ export class HeaderComponent {
 
   }
 
-  goRoot(){
+  goRoot() {
     this.event.publish('goroot');
   }
-  
-  ionViewDidLeave(){
+
+  ionViewDidLeave() {
     this.event.unsubscribe('user');
   }
 
 
-  choose(lang){
+  choose(lang) {
 
     this.translateService.use(lang);
-    
+
   }
 }

@@ -1,6 +1,8 @@
 
 modal-date {
-    
+    .toolbar-background-md{
+        background-color: map-get($colors, header-color) !important;
+    }
     .scroll-content{
         display:flex;
         flex-direction: column;
@@ -15,8 +17,9 @@ modal-date {
         }
     }
     .button{
-        background: color($colors, primary, base);;
-        border-radius: 30px !important;
+        min-height: 60px;
+        background: color($colors, header-color, base);;
+        border-radius: 10px !important;
         border: 1px solid color($colors, light, base);;
     }
 
