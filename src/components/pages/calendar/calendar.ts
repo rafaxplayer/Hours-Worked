@@ -86,7 +86,7 @@ export class CalendarPage {
 
       if (!val) {
         let msgs = this.translate.instant('HELPERS');
-        this.dialogsProvider.dialogInfo(msgs.CALENDAR_WELCOME_TITLE, msgs.CALENDAR_WELCOME_MSG, 'alertInfo')
+        this.dialogsProvider.dialogInfo(msgs.CALENDAR_WELCOME_TITLE, msgs.CALENDAR_WELCOME_MSG, 'info')
         this.simpleStorage.set('calendar', 'true');
       }
 
@@ -153,13 +153,13 @@ export class CalendarPage {
           icon: 'ios-trash',
           handler: () => {
             this.dialogsProvider.dialogConfirm(
-              this.translate.instant('DELETE_SCHEDULE'), this.translate.instant('CONFIRM_DELETE_SCHEDULE'), 'alertDanger').then((ret) => {
+              this.translate.instant('DELETE_SCHEDULE'), this.translate.instant('CONFIRM_DELETE_SCHEDULE'), 'warning').then((ret) => {
                 if (ret) {
 
                   this.database.deleteHorario(event.meta.id);
                   this.getHorarios();
                 }
-              }).catch(() => this.dialogsProvider.dialogInfo('Error', this.translate.instant('ERROR_DELETE_SCHEDULE'), 'alertDanger', 3000));
+              }).catch(() => this.dialogsProvider.dialogInfo('Error', this.translate.instant('ERROR_DELETE_SCHEDULE'), 'error', 3000));
           }
         },
         {
@@ -214,7 +214,7 @@ export class CalendarPage {
 
       if (data.isValid) {
         if (!isValid(this.segmentDate)) {
-          this.dialogsProvider.dialogInfo('Error', this.translate.instant('INVALID_SCHEDULE'), 'alertDanger');
+          this.dialogsProvider.dialogInfo('Error', this.translate.instant('INVALID_SCHEDULE'), 'error');
           return;
         }
 
@@ -222,11 +222,11 @@ export class CalendarPage {
           this.horario = this.cleanHorario();
           this.horario.start = this.segmentDate;
           this.startHorario = false;
-          this.dialogsProvider.dialogInfo(this.translate.instant('START_SCHEDULE'), this.translate.instant('END_SCHEDULE'), 'alertInfo', 3000);
+          this.dialogsProvider.dialogInfo(this.translate.instant('START_SCHEDULE'), this.translate.instant('END_SCHEDULE'), 'info', 3000);
         } else {
 
           if (isBefore(this.segmentDate, this.horario.start) || isEqual(this.segmentDate, this.horario.start)) {
-            this.dialogsProvider.dialogInfo('Error', this.translate.instant('SCHEDULE_OVERLAP'), 'alertDanger');
+            this.dialogsProvider.dialogInfo('Error', this.translate.instant('SCHEDULE_OVERLAP'), 'error');
             return;
           }
 
@@ -236,14 +236,14 @@ export class CalendarPage {
           this.horario.title = `${this.helper.formatMinutes(minutes)} ${this.translate.instant('WORKED')}`;
 
           if (this.checkSchedulesOverlap(this.horario, this.events)) {
-            this.dialogsProvider.dialogInfo('Error', this.translate.instant('SCHEDULE_OVERLAP'), 'alertDanger');
+            this.dialogsProvider.dialogInfo('Error', this.translate.instant('SCHEDULE_OVERLAP'), 'error');
             this.startHorario = true;
             return;
           }
 
           this.database.addHorario(this.horario).then((horario) => {
 
-            this.dialogsProvider.dialogInfo(this.translate.instant('SAVED'), this.translate.instant('ADD_SCHEDULE'), 'alertInfo', 2000);
+            this.dialogsProvider.dialogInfo(this.translate.instant('SAVED'), this.translate.instant('ADD_SCHEDULE'), 'success', 2000);
             this.startHorario = true;
             this.getHorarios();
 
@@ -252,7 +252,7 @@ export class CalendarPage {
       
               if (!val) {
                 let msgs = this.translate.instant('HELPERS');
-                this.dialogsProvider.dialogInfo(msgs.DAYTYPE_WELCOME_TITLE, msgs.DAYTYPE_WELCOME_MSG, 'alertInfo')
+                this.dialogsProvider.dialogInfo(msgs.DAYTYPE_WELCOME_TITLE, msgs.DAYTYPE_WELCOME_MSG, 'info')
                 this.simpleStorage.set('day-type', true);
               }
       
@@ -308,7 +308,7 @@ export class CalendarPage {
 
         if (!val) {
           let msgs = this.translate.instant('HELPERS');
-          this.dialogsProvider.dialogInfo(msgs.DAY_WELCOME_TITLE, msgs.DAY_WELCOME_MSG, 'alertInfo')
+          this.dialogsProvider.dialogInfo(msgs.DAY_WELCOME_TITLE, msgs.DAY_WELCOME_MSG, 'info')
           this.simpleStorage.set('day', true);
         }
 
@@ -348,11 +348,12 @@ export class CalendarPage {
       if (data != null) {
 
         this.database.addFreeDay(this.viewDate, data).then((freeDay) => {
+
           this.propsButtonDay = data;
           this.refresh.next();
-          this.dialogsProvider.dialogInfo('Ok', this.translate.instant('DAYTYPE_CHANGED'), 'alertInfo', 2500);
+          this.dialogsProvider.dialogInfo('Ok',this.translate.instant('DAYTYPE_CHANGED'), 'success',2500);
           this.getFreeDays();
-        }).catch(e => this.dialogsProvider.dialogInfo('Error', e.message, 'alertDanger', 3000));
+        }).catch(e => this.dialogsProvider.dialogInfo('Error', e.message, 'error', 3000));
       };
     });
     pop.present();
@@ -375,7 +376,7 @@ export class CalendarPage {
   }
 
   deleteFreeDays() {
-    this.dialogsProvider.dialogConfirm(this.translate.instant('DELETE_FREE'), this.translate.instant('DELETE_FREE_DAYS'), 'alertDanger', true)
+    this.dialogsProvider.dialogConfirm(this.translate.instant('DELETE_FREE'), this.translate.instant('DELETE_FREE_DAYS'), 'warning')
       .then((ret) => {
         if (ret) {
           this.database.removeFreeDays();

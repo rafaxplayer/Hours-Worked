@@ -51,6 +51,7 @@
         "rxjs": "^6.2.1",
         "rxjs-compat": "^6.2.1",
         "sw-toolbox": "3.6.0",
+        "sweetalert2": "^7.26.28",
         "zone.js": "0.8.26"
     },
     "devDependencies": {

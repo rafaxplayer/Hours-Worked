@@ -1,52 +1,59 @@
 import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
+import swal from 'sweetalert2';
+
 
 @Injectable()
 export class DialogsProvider {
 
+  swalDlg = swal.mixin({
+    confirmButtonClass: 'btn-dlg dlg-ok',
+    cancelButtonClass: 'btn-dlg dlg-cancel',
+    buttonsStyling: false,
+  })
+  
+
   constructor(public alertCtrl: AlertController, private translateService: TranslateService) { }
 
-  dialogInfo(title: string, message: string, cClass: string, time?: number, BackdropDismiss: boolean = true) {
-
-    let alrtInfo = this.alertCtrl.create({
+  dialogInfo(title: string, message: string, type: any, time:number = null) {
+   
+    this.swalDlg({
+      type: type,
       title: title,
-      message: message,
-      buttons: [this.translateService.instant('CLOSE')],
-      cssClass: 'alert ' + cClass,
-      enableBackdropDismiss: BackdropDismiss
-    });
-    if (time) {
-      setTimeout(() => { alrtInfo.dismiss() }, time);
-    }
-    alrtInfo.present();
+      text: message,
+      timer: time,
+      showConfirmButton: time == null
+    })
 
   }
 
-  dialogConfirm(title: string, message: string, cClass: string, BackdropDismiss: boolean = true): Promise<any> {
+  dialogConfirm(title: string, message: string, type:any): Promise<any> {
 
     return new Promise((resolve, reject) => {
-
-      let alrtConfirm = this.alertCtrl.create({
+     
+      this.swalDlg({
         title: title,
-        message: message,
-        buttons: [
-          {
-            text: this.translateService.instant('YES'),
-            handler: () => { alrtConfirm.dismiss().then(() => resolve(true)); return false; }
-          },
-          {
-            text: this.translateService.instant('CANCEL'),
-            handler: () => { alrtConfirm.dismiss().then(() => resolve(false)); return false }
-          }
-        ],
-        cssClass: 'alert ' + cClass,
-        enableBackdropDismiss: BackdropDismiss
-      });
-      alrtConfirm.present();
+        text: message,
+        type: type,
+        showCancelButton: true,
+        confirmButtonText: this.translateService.instant('YES'),
+        cancelButtonText: this.translateService.instant('CANCEL'),
+        reverseButtons: true
+      }).then((result) => {
+        if (result.value) {
+          resolve(true); return true
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === swal.DismissReason.cancel
+        ) {
+          resolve(false); return false;
+        }
+      }) 
 
     });
 
   }
 
+  
 }

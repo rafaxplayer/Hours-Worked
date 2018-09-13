@@ -72,18 +72,18 @@ export class ModalEditComponent {
       if (data.isValid) {
 
         if (!isValid(this.date)) {
-          this.dialogsProvider.dialogInfo('Error', this.translateService.instant('INVALID_SCHEDULE'), 'alertDanger');
+          this.dialogsProvider.dialogInfo('Error', this.translateService.instant('INVALID_SCHEDULE'), 'error');
           return;
         }
 
         if (this.startPeriod) {
           this.event.start = this.date;
           this.startPeriod = false;
-          this.dialogsProvider.dialogInfo(this.translateService.instant('START_SCHEDULE'), this.translateService.instant('END_SCHEDULE'), 'alertInfo');
+          this.dialogsProvider.dialogInfo(this.translateService.instant('START_SCHEDULE'), this.translateService.instant('END_SCHEDULE'), 'info');
         } else {
 
           if (isBefore(this.date, this.event.start) || isEqual(this.date, this.event.start)) {
-            this.dialogsProvider.dialogInfo('Error', this.translateService.instant('SCHEDULE_END_OVERLAP'), 'alertDanger');
+            this.dialogsProvider.dialogInfo('Error', this.translateService.instant('SCHEDULE_END_OVERLAP'), 'error');
             return;
           }
 
@@ -95,7 +95,7 @@ export class ModalEditComponent {
           this.events.push(this.event);
           this.refresh.next();
           this.startPeriod = true;
-          this.dialogsProvider.dialogConfirm('Ok', this.translateService.instant('SCHEDULE_CONFIRM', { start: this.event.start.toLocaleTimeString(), end: this.event.end.toLocaleTimeString() }), 'alertInfo', false)
+          this.dialogsProvider.dialogConfirm('Ok', this.translateService.instant('SCHEDULE_CONFIRM', { start: this.event.start.toLocaleTimeString(), end: this.event.end.toLocaleTimeString() }), 'question')
             .then((ret) => {
               if (ret) {
 
@@ -108,7 +108,7 @@ export class ModalEditComponent {
                 this.refresh.next();
               }
 
-            }).catch((err) => this.dialogsProvider.dialogInfo('Error', err, 'alertDanger'));
+            }).catch((err) => this.dialogsProvider.dialogInfo('Error', err, 'error'));
 
         }
 

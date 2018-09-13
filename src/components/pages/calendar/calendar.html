@@ -64,7 +64,7 @@
                     name="more"></ion-icon>{{ propsButtonDay.value | localizedDayType }}</button>
         </ion-col>
     </ion-row>
-    <div [ngSwitch]="view">
+    <div [ngSwitch]="view" margin-bottom>
         <mwl-calendar-month-view #calendar *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [locale]="locale"
             [weekStartsOn]="weekStartsOn" [cellTemplate]="customCellTemplate" (beforeViewRender)="beforeViewRender($event)" (dayClicked)="dayClick($event.day)">
         </mwl-calendar-month-view>

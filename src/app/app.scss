@@ -12,61 +12,36 @@
     display: flex;
 }
 
-/* alerts */
-.alertInfo{
+/* swall dialogs*/
+.btn-dlg{
+    color:#e4f9f5;
+    padding:1.5rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    margin: 5px;
+    font-size: 2em;
+    font-weight: 600;
     
-    .alert-wrapper{
-        background-color:white !important;
-        color: black !important;
-        .alert-head{
-            background-color: map-get($colors, header-color) !important;
-            color:white;
-        }
-    }
-    
-    .alert-message{
-        color: #333 !important;
-    }
-    button{
-        color:map-get($colors, primary) !important;
-    }
+}
+.dlg-ok{
+    background-color: #607d8b;
+}
+.dlg-cancel{
+    background-color: #bb3939;
+}
+.swal2-popup .swal2-title{
+    font-size: 2em;
+}
+.swal2-popup #swal2-content{
+    font-weight: 600;
+    font-size: 1.2em;
+}
+.swal2-container.swal2-shown {
+    background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
-.alertDanger{
-    .alert-wrapper{
-        .alert-head{
-            background-color: black !important;
-            color:map-get($colors , light );
-        }
-        background-color:#333 !important;
-        color:map-get($colors , danger ) !important;
-    }
-    
-    .alert-message{
-        color: white !important;
-    }
-
-    button{
-        color:map-get($colors, danger)!important;
-    }
-}
-
-.alert{
-    .alert-wrapper{
-        .alert-head{
-            h2{
-                font-size: 1.9rem;
-            }
-        }
-        
-    }
-    
-    .alert-message{
-        margin-top: 2rem;
-        overflow: auto !important;
-    }
-   
-}
+/* end swall dialogs*/
 
 ion-fab[bottom]{
     bottom:120px;
@@ -95,10 +70,12 @@ ion-fab[left]{
 }
 
 .cal-event-title {
-    padding: .8rem !important;
+    padding: 1.2rem .8rem !important;
     display: block;
     background-color: map-get($colors, primary);
     border-radius: 10px;
     color: map-get($colors, light) !important;
     text-decoration: none;
 }
+
+
