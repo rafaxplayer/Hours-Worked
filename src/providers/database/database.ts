@@ -144,9 +144,6 @@ export class DatabaseProvider {
   addFreeDay(date: Date, data: DayType) {
     return this.isReady()
       .then(() => {
-        console.log(date.toDateString());
-        console.log(data);
-
         return this.database.executeSql(`REPLACE INTO dialibre ( date, daytype) VALUES ('${date.toDateString()}' ,'${JSON.stringify(data)}');`, [])
           .then((result) => {
             if (result.insertId) {

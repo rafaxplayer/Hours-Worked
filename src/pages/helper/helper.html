@@ -1,0 +1,27 @@
+
+<ion-content padding class="has-header">
+  <ion-slides #slider>
+    <ion-slide *ngFor="let slide of slides">
+      <ion-toolbar>
+        <ion-buttons end>
+            
+            <button icon-left *ngIf="!slider.isBeginning()" ion-button color="primary" (click)="prev()" >
+                <ion-icon name="arrow-back"></ion-icon> 
+                Anterior
+            </button>
+            <button ion-button icon-right *ngIf="!slider.isEnd()" color="primary" (click)="next()">
+                Siguiente 
+                <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+            <button ion-button icon-right *ngIf="slider.isEnd()" color="primary" (click)="close()">
+                Salir 
+                <ion-icon name="close" ></ion-icon>
+            </button>
+        </ion-buttons>
+      </ion-toolbar>
+        <img [src]="slide.image" class="slide-image" />
+        <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+        <p [innerHTML]="slide.description"></p>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

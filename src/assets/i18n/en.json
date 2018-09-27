@@ -81,5 +81,6 @@
     "DAY_WELCOME_MSG": "Now select the start time of your day and then the final hour",
     "DAYTYPE_WELCOME_TITLE": "Perfect!, You have your schedule",
     "DAYTYPE_WELCOME_MSG": "Above you have a button to establish what kind of day this is in your work: Worked day, Free day or Holidays"
-  }
+  },
+  "DAYTYPE_DONT_WORKED":"This day is a holiday or holiday, you can`t set schedules"
 }

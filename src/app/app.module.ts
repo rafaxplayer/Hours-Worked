@@ -1,3 +1,4 @@
+import { HelperPage } from './../pages/helper/helper';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -7,8 +8,9 @@ import { IonicStorageModule } from '@ionic/storage';
 
 //Components & Pages
 import { AppComponent } from './app.component';
-import { CalendarPage, ChartsPage } from '../components/pages/pages.index';
+import { CalendarPage, ChartsPage } from '../pages/pages.index';
 import { HeaderComponent } from '../components/header/header';
+
 import { ModalEditComponent } from '../components/modal/modal-edit/modal-edit';
 import { ModalDateComponent } from '../components/modal/modal-date/modal-date';
 
@@ -34,7 +36,7 @@ import { HelpersProvider } from '../providers/helpers/helpers';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //Calendar
-import { CalendarModule } from 'angular-calendar';
+import { CalendarModule,DateFormatterParams,CalendarDateFormatter,CalendarNativeDateFormatter } from 'angular-calendar';
 
 //charts
 import { ChartsModule } from 'ng2-charts';
@@ -50,11 +52,23 @@ import localeEn from '@angular/common/locales/en';
 import { registerLocaleData } from '../../node_modules/@angular/common';
 
 
+
 registerLocaleData(localeEs)
 registerLocaleData(localeEn)
 
 export function setTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+// class for fomatter segment hours of calendar day
+class CustomDateFormatter extends CalendarNativeDateFormatter {
+
+  public dayViewHour({date, locale}: DateFormatterParams): string {
+    return new Intl.DateTimeFormat('ca', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).format(date);
+  }
+
 }
 
 @NgModule({
@@ -63,17 +77,24 @@ export function setTranslateLoader(http: HttpClient) {
     CalendarPage,
     HeaderComponent,
     ChartsPage,
+    HelperPage,
     SelectDayTypeComponent,
     LocalizedDatePipe,
     LocalizedDayTypePipe,
     ModalEditComponent,
     ModalDateComponent
+    
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     IonicModule.forRoot(AppComponent),
-    CalendarModule.forRoot(),
+    CalendarModule.forRoot({
+      dateFormatter: {
+        provide: CalendarDateFormatter, 
+        useClass: CustomDateFormatter
+      }
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -90,9 +111,10 @@ export function setTranslateLoader(http: HttpClient) {
     AppComponent,
     CalendarPage,
     ChartsPage,
+    HelperPage,
     SelectDayTypeComponent,
     ModalEditComponent,
-    ModalDateComponent 
+    ModalDateComponent
   ],
   providers: [
     StatusBar,

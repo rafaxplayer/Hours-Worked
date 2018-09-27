@@ -78,4 +78,7 @@ ion-fab[left]{
     text-decoration: none;
 }
 
-
+.cal-day-view .cal-hour-segment.cal-after-hour-start .cal-time {
+    display: block !important;
+    
+  }

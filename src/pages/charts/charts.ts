@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { isWithinRange, isSameWeek, isSameYear, isSameMonth, subMonths, subYears } from 'date-fns';
-import { DatabaseProvider } from '../../../providers/database/database';
+import { DatabaseProvider } from '../../providers/database/database';
 import { CalendarEvent } from 'calendar-utils';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts';
-import { ChartType } from '../../../interfaces/interfaces';
+import { ChartType } from '../../interfaces/interfaces';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { HelpersProvider } from '../../../providers/helpers/helpers';
-import { Subscription } from '../../../../node_modules/rxjs';
+import { HelpersProvider } from '../../providers/helpers/helpers';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'charts-page',

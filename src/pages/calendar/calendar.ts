@@ -4,16 +4,16 @@ import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { Subject, Subscription } from 'rxjs';
 import { isBefore, isEqual, isValid, isWithinRange, isSameDay, differenceInMinutes } from 'date-fns'
 import { ModalController, Modal } from 'ionic-angular';
-import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
-import { ChartsPage } from '../pages.index';
-import { SelectDayTypeComponent } from '../../modal/select-daytype/select-daytype';
-import { ModalEditComponent } from '../../modal/modal-edit/modal-edit';
-import { ModalDateComponent } from '../../modal/modal-date/modal-date';
+import { DialogsProvider } from '../../providers/dialogs/dialogs.service';
+import { ChartsPage, HelperPage } from '../pages.index';
+import { SelectDayTypeComponent } from '../../components/modal/select-daytype/select-daytype';
+import { ModalEditComponent } from '../../components/modal/modal-edit/modal-edit';
+import { ModalDateComponent } from '../../components/modal/modal-date/modal-date';
 import { DatePicker } from '@ionic-native/date-picker';
-import { DayType } from '../../../interfaces/interfaces';
-import { DatabaseProvider } from '../../../providers/database/database';
+import { DayType } from '../../interfaces/interfaces';
+import { DatabaseProvider } from '../../providers/database/database';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { HelpersProvider } from '../../../providers/helpers/helpers';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -67,7 +67,6 @@ export class CalendarPage {
     private helper: HelpersProvider,
     private datePicker: DatePicker,
     private simpleStorage: Storage) {
-
     this.segmentDate = new Date();
     this.propsButtonDay = this.helper.DayTypes[0];
     this.viewDate = new Date();
@@ -80,18 +79,16 @@ export class CalendarPage {
   ionViewWillEnter() {
     this.getHorarios();
     this.getFreeDays();
-
-    this.simpleStorage.get('calendar').then((val) => {
-      console.log(val);
-
-      if (!val) {
-        let msgs = this.translate.instant('HELPERS');
-        this.dialogsProvider.dialogInfo(msgs.CALENDAR_WELCOME_TITLE, msgs.CALENDAR_WELCOME_MSG, 'info')
-        this.simpleStorage.set('calendar', 'true');
+   
+    this.simpleStorage.get('init').then(val=>{
+      //ojo
+      this.navCtrl.push( HelperPage );
+      if(!val){
+        this.navCtrl.push( HelperPage );
+        this.simpleStorage.set('init', 'true');
       }
 
-    })
-
+    });
   }
 
   getHorarios() {
@@ -198,6 +195,11 @@ export class CalendarPage {
 
   openDateModal() {
 
+    if(this.propsButtonDay.value != 'worked'){
+      this.dialogsProvider.dialogInfo('Error', this.translate.instant('DAYTYPE_DONT_WORKED'), 'error');
+      return
+    }
+
     let periodMsg = this.helper.getPeriodMsg(this.startHorario);
     let dateModal = this.helper.getFormatDate(this.segmentDate);
     let hourModal = this.helper.getFormatHour(this.segmentDate, this.startHorario);
@@ -248,13 +250,6 @@ export class CalendarPage {
             this.getHorarios();
 
             this.simpleStorage.get('day-type').then((val) => {
-              console.log(val);
-      
-              if (!val) {
-                let msgs = this.translate.instant('HELPERS');
-                this.dialogsProvider.dialogInfo(msgs.DAYTYPE_WELCOME_TITLE, msgs.DAYTYPE_WELCOME_MSG, 'info')
-                this.simpleStorage.set('day-type', true);
-              }
       
             })
 
@@ -302,18 +297,7 @@ export class CalendarPage {
 
     // view day render....
     if (this.view == 'day') {
-      //tutorial on first use
-      this.simpleStorage.get('day').then((val) => {
-        console.log(val);
-
-        if (!val) {
-          let msgs = this.translate.instant('HELPERS');
-          this.dialogsProvider.dialogInfo(msgs.DAY_WELCOME_TITLE, msgs.DAY_WELCOME_MSG, 'info')
-          this.simpleStorage.set('day', true);
-        }
-
-      })
-
+      
       // button typeday on view day
       let daytypedata: any = this.dayTypesStored.filter((data) => isSameDay(this.viewDate.toDateString(), data.date));
       this.propsButtonDay = daytypedata.length > 0 ? JSON.parse(daytypedata[daytypedata.length - 1].daytype) : this.helper.DayTypes[0];
@@ -394,6 +378,7 @@ export class CalendarPage {
   ionViewWillUnload() {
     this.translateObserver.unsubscribe();
   }
+
   // show date picker 
   showDatePicker() {
 
