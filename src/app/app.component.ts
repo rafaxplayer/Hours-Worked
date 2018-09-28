@@ -18,10 +18,10 @@ export class AppComponent {
   rootPage:any =  CalendarPage;
     
   constructor(platform: Platform, 
-    statusBar:StatusBar, 
-    public splashScreen:SplashScreen, 
-    private event:Events ,
-    private app:App) {
+              statusBar:StatusBar, 
+              public splashScreen:SplashScreen, 
+              private event:Events,
+              private app:App) {
       
     platform.ready().then(() => {
 

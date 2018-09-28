@@ -23,13 +23,14 @@ export class HeaderComponent {
 
     platform.ready().then(() => {
 
-      this.simpleStorage.get('lang').then(lang => {
+      translateService.addLangs(['en', 'es']);
 
-        console.log('default lang', lang)
-        const defaultlang = lang ? lang : 'en';
-        this.translateService.setDefaultLang( defaultlang );
-        this.translateService.use( defaultlang );
+      this.translateService.setDefaultLang( 'en' );
 
+      this.simpleStorage.get('lang').then( lang => {
+        
+        this.translateService.use( lang ? lang : 'en' );
+        
       });
 
       this.location = this.translateService.currentLang;
@@ -44,7 +45,6 @@ export class HeaderComponent {
   }
 
   goRoot() {
-
     this.event.publish('goroot');
   }
 
@@ -53,8 +53,6 @@ export class HeaderComponent {
   }
 
   choose(lang) {
-
     this.translateService.use(lang);
-
   }
 }

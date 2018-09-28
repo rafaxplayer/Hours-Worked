@@ -3,6 +3,7 @@
   "CANCEL": "Cancel",
   "CLOSE": "Close",
   "SAVE": "Save",
+  "EXIT":"Exit",
   "APP_TITLE": "Hours Worked",
   "LANGUAGE": "Language",
   "SPANISH": "Spanish",
@@ -74,13 +75,19 @@
   "FINISH": "Finish ",
   "START_SCHEDULE": "Start schedule ,established",
   "END_SCHEDULE": "Set the end of your schedule",
+  "DAYTYPE_DONT_WORKED": "This day is a holiday or holiday, you can`t set schedules",
   "HELPERS": {
-    "CALENDAR_WELCOME_TITLE": "Welcome to HOURS WORKED APP",
-    "CALENDAR_WELCOME_MSG": "Start by choosing a day to edit your worked schedules",
-    "DAY_WELCOME_TITLE": "Very Good!",
-    "DAY_WELCOME_MSG": "Now select the start time of your day and then the final hour",
-    "DAYTYPE_WELCOME_TITLE": "Perfect!, You have your schedule",
-    "DAYTYPE_WELCOME_MSG": "Above you have a button to establish what kind of day this is in your work: Worked day, Free day or Holidays"
-  },
-  "DAYTYPE_DONT_WORKED":"This day is a holiday or holiday, you can`t set schedules"
+    "title1": "Welcome to Hours Worked",
+    "description1": "Haremos una breve visita por la opciones que componen la aplicación <b>deslizate por la pantalla o pulsa Sigiente</b>",
+    "image1": "assets/imgs/logo_tuto.png",
+    "title2": "¿Empezamos?",
+    "description2": "Pincha un dia al que quieras establecer un horario trabajado",
+    "image2": "assets/imgs/tuto-1.png",
+    "title3": "Inicio de horario",
+    "description3": "Selecciona el inicio de tu horario y despues el final del mismo",
+    "image3": "assets/imgs/tuto-2.png",
+    "title4": "Tipo de dia",
+    "description4": "Puedes seleccionar el tipo de dia ya sea Festivo ,Trabajado o vacaciones, esto teservira para ver que dias no trabajas.",
+    "image4": "assets/imgs/tuto-3.png"
+  }
 }

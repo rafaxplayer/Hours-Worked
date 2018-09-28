@@ -79,12 +79,11 @@ export class CalendarPage {
   ionViewWillEnter() {
     this.getHorarios();
     this.getFreeDays();
-   
-    this.simpleStorage.get('init').then(val=>{
-      //ojo
-      this.navCtrl.push( HelperPage );
-      if(!val){
-        this.navCtrl.push( HelperPage );
+
+    this.simpleStorage.get('init').then(val => {
+
+      if (!val) {
+        this.navCtrl.push(HelperPage);
         this.simpleStorage.set('init', 'true');
       }
 
@@ -92,6 +91,7 @@ export class CalendarPage {
   }
 
   getHorarios() {
+
     this.database.getHorarios().then((horarios) => {
 
       this.events = [];
@@ -110,6 +110,7 @@ export class CalendarPage {
   }
 
   getFreeDays() {
+
     this.database.getFreeDays().then((freedays) => {
 
       this.dayTypesStored = [];
@@ -139,6 +140,7 @@ export class CalendarPage {
 
   //Event clicked
   eventClicked({ event }: { event: CalendarEvent }): void {
+
     let actSheetEvent = this.actSheet.create({
       title: this.translate.instant('WHAT_SCHEDULE'),
       enableBackdropDismiss: true,
@@ -189,13 +191,14 @@ export class CalendarPage {
 
   // hour click on day view
   hour_clicked(event) {
+    
     this.segmentDate = new Date(event.date);
     this.openDateModal();
   }
 
   openDateModal() {
 
-    if(this.propsButtonDay.value != 'worked'){
+    if (this.propsButtonDay.value != 'worked') {
       this.dialogsProvider.dialogInfo('Error', this.translate.instant('DAYTYPE_DONT_WORKED'), 'error');
       return
     }
@@ -250,7 +253,7 @@ export class CalendarPage {
             this.getHorarios();
 
             this.simpleStorage.get('day-type').then((val) => {
-      
+
             })
 
           }).catch(e => console.log(e));
@@ -297,7 +300,7 @@ export class CalendarPage {
 
     // view day render....
     if (this.view == 'day') {
-      
+
       // button typeday on view day
       let daytypedata: any = this.dayTypesStored.filter((data) => isSameDay(this.viewDate.toDateString(), data.date));
       this.propsButtonDay = daytypedata.length > 0 ? JSON.parse(daytypedata[daytypedata.length - 1].daytype) : this.helper.DayTypes[0];
@@ -335,7 +338,7 @@ export class CalendarPage {
 
           this.propsButtonDay = data;
           this.refresh.next();
-          this.dialogsProvider.dialogInfo('Ok',this.translate.instant('DAYTYPE_CHANGED'), 'success',2500);
+          this.dialogsProvider.dialogInfo('Ok', this.translate.instant('DAYTYPE_CHANGED'), 'success', 2500);
           this.getFreeDays();
         }).catch(e => this.dialogsProvider.dialogInfo('Error', e.message, 'error', 3000));
       };

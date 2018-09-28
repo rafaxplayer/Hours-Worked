@@ -5,10 +5,10 @@
             HOURS <span>WORKED</span>
         </ion-title>
         <ion-select [(ngModel)]="location" (ionChange)="choose($event)">
-            <ion-option value="es" selected="'es' == location">
+            <ion-option value="es" [selected]="'es' === location">
                 {{ 'SPANISH' | translate }}
             </ion-option>
-            <ion-option value="en" selected="'en' == location">
+            <ion-option value="en" [selected]="'en' === location">
                 {{ 'ENGLISH' | translate }}
             </ion-option>
           </ion-select>
