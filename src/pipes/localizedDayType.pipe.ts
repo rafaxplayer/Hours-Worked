@@ -7,8 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LocalizedDayTypePipe implements PipeTransform {
 
-  constructor(private translateService: TranslateService) {
-  }
+  constructor(private translateService: TranslateService) {}
 
   transform(value:string): string {
    

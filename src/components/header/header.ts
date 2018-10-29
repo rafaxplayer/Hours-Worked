@@ -4,6 +4,7 @@ import { CalendarPage } from '../../pages/calendar/calendar';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
+
 @Component({
   selector: 'header',
   templateUrl: 'header.html'
@@ -16,6 +17,8 @@ export class HeaderComponent {
 
   location: string;
 
+  isActiveSettingsPage:boolean=false;
+  
   constructor(public event: Events,
     platform: Platform,
     private translateService: TranslateService,
@@ -40,19 +43,31 @@ export class HeaderComponent {
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       this.location = event.lang;
       this.simpleStorage.set('lang', event.lang);
+      
     });
 
+    this.event.subscribe('settingsIsActive',( isactive )=>{
+      this.isActiveSettingsPage = isactive;
+    })
+
+  }
+
+  goSettingsPage(){
+    this.event.publish('goSettings');
   }
 
   goRoot() {
     this.event.publish('goroot');
   }
-
-  ionViewDidLeave() {
-    this.event.unsubscribe('user');
-  }
+  
 
   choose(lang) {
     this.translateService.use(lang);
   }
+  
+  ionViewWillUnload(){
+    this.event.unsubscribe('settingsIsActive');
+  }
+
+  
 }

@@ -4,13 +4,8 @@
         <ion-title (click)="goRoot()">
             HOURS <span>WORKED</span>
         </ion-title>
-        <ion-select [(ngModel)]="location" (ionChange)="choose($event)">
-            <ion-option value="es" [selected]="'es' === location">
-                {{ 'SPANISH' | translate }}
-            </ion-option>
-            <ion-option value="en" [selected]="'en' === location">
-                {{ 'ENGLISH' | translate }}
-            </ion-option>
-          </ion-select>
+        <button ion-button icon-only (click)="goSettingsPage()" [hidden]="isActiveSettingsPage">
+            <ion-icon name="settings"></ion-icon>
+        </button>
     </ion-navbar>
 </ion-header>

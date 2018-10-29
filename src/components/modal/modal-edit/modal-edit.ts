@@ -55,9 +55,9 @@ export class ModalEditComponent {
 
   openModalDate() {
 
-    let periodMsg = this.helpers.getPeriodMsg(this.startPeriod);
-    let dateModal = this.helpers.getFormatDate(this.date);
-    let hourModal = this.helpers.getFormatHour(this.date, this.startPeriod);
+    let periodMsg = this.helpers.modalPeriodMsg(this.startPeriod);
+    let dateModal = this.helpers.modalFormatDate(this.date);
+    let hourModal = this.helpers.modalFormatHour(this.date, this.startPeriod);
 
     let dataModal = {
       periodtext: periodMsg,

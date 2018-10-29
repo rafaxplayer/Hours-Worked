@@ -1,6 +1,37 @@
 
 <ion-content padding class="has-header">
   <ion-slides #slider>
+    <ion-slide>
+        <ion-toolbar>
+            <ion-buttons end>
+                <button icon-left *ngIf="!slider.isBeginning()" ion-button color="primary" (click)="prev()" >
+                    <ion-icon name="arrow-back"></ion-icon> 
+                    {{'PREVIOUS' | translate | uppercase }}
+                </button>
+                <button ion-button icon-right *ngIf="!slider.isEnd()" color="primary" (click)="next()">
+                    {{'NEXT' | translate | uppercase }}
+                    <ion-icon name="arrow-forward"></ion-icon>
+                </button>
+                <button ion-button icon-right *ngIf="slider.isEnd()" color="primary" (click)="close()">
+                    {{'EXIT' | translate | uppercase }}
+                    <ion-icon name="close" ></ion-icon>
+                </button>
+            </ion-buttons>
+          </ion-toolbar>
+            <img style="max-height:150px" src="assets/imgs/logo_tuto.png" class="slide-image" />
+            <h2 class="slide-title"> Select your language</h2>
+            <ion-row>
+              <ion-col (click)="selectLang('es')" justify-content-end>
+                <img style="max-width:100px" src="assets/imgs/es.png" alt="">
+                <div><b>Spanish</b></div>
+              </ion-col>
+              <ion-col (click)="selectLang('en')" justify-content-start>
+                  <img style="max-width:100px" src="assets/imgs/en.png" alt="">
+                  <div><b>English</b></div>
+              </ion-col>
+            </ion-row>
+            
+    </ion-slide>
     <ion-slide *ngFor="let slide of slides">
       <ion-toolbar>
         <ion-buttons end>

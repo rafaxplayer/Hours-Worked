@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ViewChild} from '@angular/core'
 import { CalendarPage } from '../pages/calendar/calendar';
+import { SettingsPage } from '../pages/settings/settings';
 
 
 @Component({
@@ -49,8 +50,16 @@ export class AppComponent {
 
     })
     
-    //header event to nav root page
-    this.event.subscribe('goroot',() => this.nav.popToRoot());
+   //header event to nav root page
+   this.event.subscribe('goroot',() => this.nav.popToRoot());
+
+   this.event.subscribe('goSettings',() => this.nav.push(SettingsPage));
     
   }
+
+  ionViewWillUnload(){
+   this.event.unsubscribe('goroot');
+   this.event.unsubscribe('goSettings');
+  }
+   
 }

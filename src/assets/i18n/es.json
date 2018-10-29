@@ -66,6 +66,7 @@
     "HOURS_WORKED_WEEK": "Horas Trabajadas la semana del",
     "HOURS_WORKED_MONTH": "Horas Trabajadas el mes de",
     "HOURS_WORKED_YEAR": "Horas Trabajadas el año",
+    "OVERTIME_HOURS": "Horas extras",
     "SCHEDULE_CONFIRM": "Horario creado, Inicio: {{ start }} Final: {{ end }} ¿Quieres guardarlo asi?",
     "EDIT_SCHEDULE": "Editar Horario",
     "SELECT_EDIT_SCHEDULE": "Selecciona nueva franja horaria para editarlo",
@@ -89,5 +90,11 @@
         "title4": "Tipo de dia",
         "description4": "Puedes seleccionar el tipo de dia ya sea Festivo ,Trabajado o vacaciones, esto teservira para ver que dias no trabajas.",
         "image4": "assets/imgs/tuto-3.png"
-    }
+    },
+    "CHART_TYPE":"Tipo De Gráfico",
+    "MODAL_DATE":"Dia {{ day }} de {{ month }} {{ year }}",
+    "SELECT_LANGUAGE":"Seleciona tu idioma",
+    "HOURS_WORKDAY":"Horas de tu jornada laboral",
+    "SELECT_HOURS_WORKDAY":"Selecciona las horas que componen tu jornada laboral diaria.",
+    "SELECT_HOURS_WORKDAY_DESC":"Esto servira para comprobar las horas extras que haces."
 }

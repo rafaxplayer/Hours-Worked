@@ -1,6 +1,7 @@
+import { Storage } from '@ionic/storage';
 import { Component, ChangeDetectionStrategy, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { isWithinRange, isSameWeek, isSameYear, isSameMonth, subMonths, subYears } from 'date-fns';
+import { isWithinRange, isSameWeek, isSameYear, isSameMonth, subMonths, subYears, getDaysInMonth, isSameDay } from 'date-fns';
 import { DatabaseProvider } from '../../providers/database/database';
 import { CalendarEvent } from 'calendar-utils';
 import { BaseChartDirective } from 'ng2-charts/ng2-charts';
@@ -23,6 +24,8 @@ export class ChartsPage {
     responsive: true
   };
 
+  overtimeHours: number;
+
   chartType: string;
 
   barChartLegend: boolean = true;
@@ -37,26 +40,35 @@ export class ChartsPage {
 
   translateObserver: Subscription;
 
-  barChartDataYear: Array<any> = [
-    { data: [], label: this.translateService.instant('HOURS_THIS_YEAR') },
-    { data: [], label: this.translateService.instant('HOURS_PREV_YEAR') }
+  barChartDataWeek: Array<any> = [
+    { data: [], label: this.translateService.instant('HOURS_THIS_WEEK') },
+    { data: [], label: this.translateService.instant('HOURS_PREV_WEEK') },
+    { data: [], label: this.translateService.instant('OVERTIME_HOURS') }
   ];
 
-  allHoursYear: number;
+  allHoursWeek: string;
+
+  allOverTimeHoursWeek: string;
 
   barChartDataMonth: Array<any> = [
     { data: [], label: this.translateService.instant('HOURS_THIS_MONTH') },
-    { data: [], label: this.translateService.instant('HOURS_PREV_MONTH') }
+    { data: [], label: this.translateService.instant('HOURS_PREV_MONTH') },
+    { data: [], label: this.translateService.instant('OVERTIME_HOURS') }
   ];
 
-  allHoursMonth: number;
+  allHoursMonth: string;
 
-  barChartDataWeek: Array<any> = [
-    { data: [], label: this.translateService.instant('HOURS_THIS_WEEK') },
-    { data: [], label: this.translateService.instant('HOURS_PREV_WEEK') }
+  allOverTimeHoursMonth: string;
+
+  barChartDataYear: Array<any> = [
+    { data: [], label: this.translateService.instant('HOURS_THIS_YEAR') },
+    { data: [], label: this.translateService.instant('HOURS_PREV_YEAR') },
+    { data: [], label: this.translateService.instant('OVERTIME_HOURS') }
   ];
 
-  allHoursWeek: number;
+  allHoursYear: string;
+
+  allOverTimeHoursYear: string;
 
   date: Date;
 
@@ -71,7 +83,8 @@ export class ChartsPage {
     public navParams: NavParams,
     private translateService: TranslateService,
     private helpers: HelpersProvider,
-    private changeRef: ChangeDetectorRef) {
+    private changeRef: ChangeDetectorRef,
+    private simpleStorage: Storage) {
 
     this.chartTypes = [{ id: 'bar', value: 'Bars' }, { id: 'line', value: 'Line' }, { id: 'pie', value: 'Pie' }, { id: 'radar', value: 'Radar' }, { id: 'doughnut', value: 'Doughnut' }]
 
@@ -83,6 +96,10 @@ export class ChartsPage {
       this.date = navParams.data.date;
     }
 
+    this.simpleStorage.get('hours').then((nHours) => {
+      this.overtimeHours = nHours ? Number(nHours) : 0;
+    })
+
 
     this.translateObserver = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
 
@@ -91,19 +108,25 @@ export class ChartsPage {
 
       this.barChartDataYear[0].label = event.translations.HOURS_THIS_YEAR;
       this.barChartDataYear[1].label = event.translations.HOURS_PREV_YEAR;
+      this.barChartDataYear[2].label = event.translations.OVERTIME_HOURS;
 
       this.barChartDataMonth[0].label = event.translations.HOURS_THIS_MONTH;
       this.barChartDataMonth[1].label = event.translations.HOURS_PREV_MONTH;
+      this.barChartDataMonth[2].label = event.translations.OVERTIME_HOURS;
 
       this.barChartDataWeek[0].label = event.translations.HOURS_THIS_WEEK;
       this.barChartDataWeek[1].label = event.translations.HOURS_PREV_WEEK;
+      this.barChartDataWeek[2].label = event.translations.OVERTIME_HOURS;
 
       changeRef.detectChanges();
     });
 
-    this.allHoursMonth = 0;
-    this.allHoursWeek = 0;
-    this.allHoursYear = 0;
+    this.allHoursMonth = '00:00';
+    this.allHoursWeek = '00:00';
+    this.allHoursYear = '00:00';
+    this.allOverTimeHoursMonth = '00:00';
+    this.allOverTimeHoursWeek = '00:00';
+    this.allOverTimeHoursYear = '00:00';
 
   }
 
@@ -139,52 +162,81 @@ export class ChartsPage {
     this.chartList.forEach((child) => child.chart.update());
   }
 
-  updateChartYearHours(dataChartYear: Array<any>, date: Date) {
+  updateChartWeekHours(dataChartWeek: Array<any>, date: Date) {
+    //loop 0,6 day of the week
+    let totalMinutesWeek = 0;
+    let totalOverMinutsWeek = 0;
+    for (let i = 0; i < 7; i++) {
+      let minutes = this.getDayMinutesofThisWeek(this.horarios, i, date, true);
+      let overminutesDay = this.calcOverTimeMinutesForday(minutes, this.overtimeHours);
 
-    for (let i = 0; i < 12; i++) {
-      dataChartYear[0].data.push(this.getMonthHours(this.horarios, i, date));
-      dataChartYear[1].data.push(this.getMonthHours(this.horarios, i, subYears(date, 1)));
+      totalMinutesWeek = totalMinutesWeek + minutes;
+      totalOverMinutsWeek = totalOverMinutsWeek + overminutesDay;
+
+      dataChartWeek[0].data.push(this.helpers.convertMinutesToHours(minutes));
+      //last day
+      dataChartWeek[1].data.push(this.helpers.convertMinutesToHours(this.getDayMinutesofThisWeek(this.horarios, i, date, false)));
+      dataChartWeek[2].data.push(this.helpers.convertMinutesToHours(overminutesDay));
+
     }
-    this.allHoursYear = this.countAllHours(dataChartYear[0].data);
+
+    this.allHoursWeek = this.helpers.convertMinutesToHours(totalMinutesWeek).toString().replace('.', ':');
+
+    this.allOverTimeHoursWeek = this.helpers.convertMinutesToHours(totalOverMinutsWeek).toString().replace('.', ':');
+
+
   }
 
   updateChartMonthHours(dataChartMonth: Array<any>, date: Date) {
 
     let datePreviousMonth = subMonths(date, 1);
 
+    let totalOverMinutsMonth = 0;
+
     for (let i = 1; i <= this.barChartLabelsMonth.length; i++) {
-      dataChartMonth[0].data.push(this.getDayHours(this.horarios, i, date));
-      dataChartMonth[1].data.push(this.getDayHours(this.horarios, i, datePreviousMonth));
+
+      let minutes = this.getDayMinutes(this.horarios, i, date);
+      let overMinutsDay = this.calcOverTimeMinutesForday(this.getDayMinutes(this.horarios, i, date), this.overtimeHours)
+
+      totalOverMinutsMonth = totalOverMinutsMonth + overMinutsDay;
+
+      dataChartMonth[0].data.push(this.helpers.convertMinutesToHours(minutes));
+      //last month
+      dataChartMonth[1].data.push(this.helpers.convertMinutesToHours(this.getDayMinutes(this.horarios, i, datePreviousMonth)));
+      dataChartMonth[2].data.push(this.helpers.convertMinutesToHours(overMinutsDay));
     }
 
-    this.allHoursMonth = this.countAllHours(dataChartMonth[0].data);
+    this.allHoursMonth = this.helpers.convertMinutesToHours(this.getMonthMinutes(this.horarios, date.getMonth(), date)).toString().replace('.', ':');
 
+    this.allOverTimeHoursMonth = this.helpers.convertMinutesToHours(totalOverMinutsMonth).toString().replace('.', ':');
   }
 
-  updateChartWeekHours(dataChartWeek: Array<any>, date: Date) {
+  updateChartYearHours(dataChartYear: Array<any>, date: Date) {
 
-    for (let i = 0; i < 7; i++) {
-      dataChartWeek[0].data.push(this.getDayHoursofThisWeek(this.horarios, i, date, true));
-      dataChartWeek[1].data.push(this.getDayHoursofThisWeek(this.horarios, i, date, false));
+    let totalminutesYear = 0;
+    let totalOvertimeOverYear = 0;
+
+    for (let i = 0; i < 12; i++) {
+
+      let minutes = this.getMonthMinutes(this.horarios, i, date);
+      let overTimeMinutesforMonth = this.calcOverTimeMinutesForMonth(this.horarios,i, date, this.overtimeHours);
+           
+      totalminutesYear = totalminutesYear + minutes;
+      totalOvertimeOverYear = totalOvertimeOverYear + overTimeMinutesforMonth;
+
+      dataChartYear[0].data.push(this.helpers.convertMinutesToHours(minutes));
+      //last month
+      dataChartYear[1].data.push(this.helpers.convertMinutesToHours(this.getMonthMinutes(this.horarios, i, subYears(date, 1))));
+      dataChartYear[2].data.push(this.helpers.convertMinutesToHours(overTimeMinutesforMonth));
     }
 
-    this.allHoursWeek = this.countAllHours(dataChartWeek[0].data);
+    this.allHoursYear = this.helpers.convertMinutesToHours(totalminutesYear).toString().replace('.', ':');
 
-  }
-
-  getMonthHours(data: CalendarEvent[], month: number, date: Date): number {
-
-    let thisMonth = data.filter(item => {
-      const itemDate = new Date(item.start);
-      return itemDate.getMonth() == month && isSameYear(itemDate, date);
-    });
-
-    return this.dataToHours(thisMonth);
-
+    this.allOverTimeHoursYear = this.helpers.convertMinutesToHours(totalOvertimeOverYear).toString().replace('.', ':');
   }
 
 
-  getDayHoursofThisWeek(data: CalendarEvent[], dayofWeek: number, date: Date, isThis: boolean) {
+  getDayMinutesofThisWeek(data: CalendarEvent[], dayofWeek: number, date: Date, isThis: boolean) {
 
     let daysOfThisWeek = data.filter(item => {
 
@@ -203,30 +255,42 @@ export class ChartsPage {
 
     });
 
-    return this.dataToHours(daysOfThisWeek);
+    return this.dataToMinutes(daysOfThisWeek);
   }
 
+  getMonthMinutes(data: CalendarEvent[], month: number, date: Date): number {
+
+    let thisMonth = data.filter(item => {
+      const itemDate = new Date(item.start);
+      return itemDate.getMonth() == month && isSameYear(itemDate, date);
+    });
+
+    return this.dataToMinutes(thisMonth);
+
+  }
   // get hours worked with day
-  getDayHours(data: CalendarEvent[], day: number, date: Date): number {
+  getDayMinutes(data: CalendarEvent[], day: number, date: Date): number {
 
     let daysMonth = data.filter(item => {
       let itemDate = new Date(item.start);
       return (isSameMonth(itemDate, date) && isSameYear(itemDate, date) && itemDate.getDate() == day);
     });
 
-    return this.dataToHours(daysMonth);
+    return this.dataToMinutes(daysMonth);
 
   }
 
+  dataToMinutes(data: any[]): number {
 
-  dataToHours(data: any[]): number {
     let minutes = 0;
+
     if (data.length > 0) {
       data.map(data => {
         minutes = minutes + data.meta.minutes;
       })
     }
-    return this.helpers.convertMinutesToHours(minutes);
+    return minutes;
+
   }
 
   getRangePreviousWeek(date: Date): any {
@@ -248,14 +312,29 @@ export class ChartsPage {
     return prevDatesWeek;
 
   }
+  // calacular horas extras del dia
+  calcOverTimeMinutesForday(nMinutes: number, baseHours: number) {
 
-  countAllHours(dataChar: any[]): number {
-    let numHours = 0;
-    dataChar.forEach(data => {
-      numHours = numHours + data
+    let baseMinutes = baseHours * 60;
+    
+    if (nMinutes > baseMinutes) {
+
+      return nMinutes - baseMinutes;
+    }
+    return 0;
+  }
+
+  // calacular horas extras del mes
+  calcOverTimeMinutesForMonth(data: any[],month: number, date: Date, baseHours: number) {
+       
+    let thisMonth = data.filter(item => {
+      const itemDate = new Date(item.start);
+     
+      return itemDate.getMonth() == month && isSameYear(itemDate, date);
     });
 
-    return numHours;
+    return 0;
+
   }
 
   chartChange(event) {

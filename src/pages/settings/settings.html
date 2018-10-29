@@ -1,0 +1,37 @@
+<ion-content class="has-header">
+ <ion-grid>
+    <ion-row justify-content-center>
+        <ion-col col-12>
+          <h2>{{ 'SELECT_LANGUAGE' | translate}}</h2>
+        </ion-col>
+        <ion-col (click)="selectLang('es')" >
+          <img style="max-width:100px" src="assets/imgs/es.png" alt="spa">
+          <div><b>{{ 'SPANISH' | translate}}</b></div>
+        </ion-col>
+        <ion-col (click)="selectLang('en')">
+            <img style="max-width:100px" src="assets/imgs/en.png" alt="english">
+            <div><b>{{ 'ENGLISH' | translate}}</b></div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <hr>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+            <h2>{{ 'HOURS_WORKDAY' | translate }}</h2>
+        </ion-col>
+          <ion-col col-12>
+            <p>{{ 'SELECT_HOURS_WORKDAY' | translate }}</p>
+            <p>{{ 'SELECT_HOURS_WORKDAY_DESC' | translate }}</p>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col class="col-input" col-12> 
+            <ion-input #hoursNumber type="number" [(ngModel)]="hNumber" disabled></ion-input><button ion-button icon-only (click)="selectHours()"><ion-icon name="md-keypad"></ion-icon></button>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <hr>
+      </ion-row>
+  </ion-grid>
+</ion-content>

@@ -33,7 +33,7 @@
             <ion-card padding [color]="view == 'day' ? propsButtonDay.color : 'dark' ">
                 <ion-card-content>
                     <ion-card-title>
-                        ({{viewDate | date: 'd'}}) {{ viewDate | date: 'MMMM y' }} 
+                        ({{ viewDate | date: 'd' }}) {{ viewDate | date: 'MMMM y' }} 
                     </ion-card-title>
                     <p>
                         <ion-icon name="ios-time-outline"></ion-icon> {{ hoursWorked }} {{ 'APP_TITLE' | translate }}
@@ -42,8 +42,8 @@
             </ion-card>
             <ion-card padding *ngIf="view=='month'">
                 <ion-item>
-                    <p><strong>TP</strong> {{ 'TURN_FOLLOWED' | translate }}.</p>
-                    <p><strong>TS</strong> {{ 'MATCH_TURN' | translate }}.</p>
+                    <p><strong>TS</strong> {{ 'TURN_FOLLOWED' | translate }}.</p>
+                    <p><strong>TP</strong> {{ 'MATCH_TURN' | translate }}.</p>
                 </ion-item>
                 <ion-item>
                     <div class="color-days"> <span class="worked" style="border:1px solid #333"></span>{{ 'WORKED' | translate

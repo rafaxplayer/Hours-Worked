@@ -1,3 +1,4 @@
+import { DialogsProvider } from './../../providers/dialogs/dialogs.service';
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides } from 'ionic-angular';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -14,7 +15,8 @@ export class HelperPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private dialogs:DialogsProvider) { }
 
   ionViewDidEnter() {
 
@@ -24,7 +26,7 @@ export class HelperPage {
     });
 
     this.translate.onLangChange.subscribe((event:LangChangeEvent)=>{
-      this.slides=this.initHelper(event.translations.HELPERS);
+      this.slides = this.initHelper(event.translations.HELPERS);
 
     })
   }
@@ -63,5 +65,11 @@ export class HelperPage {
         description: val.description4,
         image: val.image4
       }]
+  }
+
+  selectLang(lang){
+    this.translate.use(lang);
+    this.dialogs.dialogInfo('Ok!' ,'Language changed' ,'success' ,1500);
+
   }
 }

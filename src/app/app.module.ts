@@ -8,9 +8,8 @@ import { IonicStorageModule } from '@ionic/storage';
 
 //Components & Pages
 import { AppComponent } from './app.component';
-import { CalendarPage, ChartsPage } from '../pages/pages.index';
+import { CalendarPage ,ChartsPage ,SettingsPage } from '../pages/pages.index';
 import { HeaderComponent } from '../components/header/header';
-
 import { ModalEditComponent } from '../components/modal/modal-edit/modal-edit';
 import { ModalDateComponent } from '../components/modal/modal-date/modal-date';
 
@@ -26,6 +25,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { DatePicker } from '@ionic-native/date-picker';
+import { WheelSelector } from '@ionic-native/wheel-selector'
 
 //Providers
 import { DialogsProvider } from '../providers/dialogs/dialogs.service';
@@ -75,6 +75,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
   declarations: [
     AppComponent,
     CalendarPage,
+    SettingsPage,
     HeaderComponent,
     ChartsPage,
     HelperPage,
@@ -83,7 +84,6 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     LocalizedDayTypePipe,
     ModalEditComponent,
     ModalDateComponent
-    
   ],
   imports: [
     BrowserModule,
@@ -111,6 +111,7 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     AppComponent,
     CalendarPage,
     ChartsPage,
+    SettingsPage,
     HelperPage,
     SelectDayTypeComponent,
     ModalEditComponent,
@@ -124,7 +125,8 @@ class CustomDateFormatter extends CalendarNativeDateFormatter {
     DatabaseProvider,
     SQLite,
     HelpersProvider,
-    DatePicker
+    DatePicker,
+    WheelSelector
   ]
 })
 export class AppModule {}

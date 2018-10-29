@@ -203,9 +203,9 @@ export class CalendarPage {
       return
     }
 
-    let periodMsg = this.helper.getPeriodMsg(this.startHorario);
-    let dateModal = this.helper.getFormatDate(this.segmentDate);
-    let hourModal = this.helper.getFormatHour(this.segmentDate, this.startHorario);
+    let periodMsg = this.helper.modalPeriodMsg(this.startHorario);
+    let dateModal = this.helper.modalFormatDate(this.segmentDate);
+    let hourModal = this.helper.modalFormatHour(this.segmentDate, this.startHorario);
 
     let dataModal = {
       periodtext: periodMsg,
@@ -251,11 +251,7 @@ export class CalendarPage {
             this.dialogsProvider.dialogInfo(this.translate.instant('SAVED'), this.translate.instant('ADD_SCHEDULE'), 'success', 2000);
             this.startHorario = true;
             this.getHorarios();
-
-            this.simpleStorage.get('day-type').then((val) => {
-
-            })
-
+           
           }).catch(e => console.log(e));
 
         }
