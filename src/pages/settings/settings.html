@@ -33,5 +33,13 @@
       <ion-row>
           <hr>
       </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <h2>{{ 'RELOAD_HELPER' | translate }}</h2>
+        </ion-col>
+        <ion-col class="col-input" col-12> 
+          <button ion-button icon-only [navPush]="helperPage"><ion-icon name="md-help"></ion-icon></button>
+        </ion-col>
+      </ion-row>
   </ion-grid>
 </ion-content>

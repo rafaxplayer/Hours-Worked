@@ -1,4 +1,4 @@
-import { DialogsProvider } from './../../providers/dialogs/dialogs.service';
+import { DialogsProvider } from '../../providers/dialogs/dialogs.provider';
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides } from 'ionic-angular';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -16,16 +16,16 @@ export class HelperPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private translate: TranslateService,
-    private dialogs:DialogsProvider) { }
+    private dialogs: DialogsProvider) { }
 
   ionViewDidEnter() {
 
     this.translate.get('HELPERS').subscribe(val => {
-        this.slides = this.initHelper(val);
-      
+      this.slides = this.initHelper(val);
+
     });
 
-    this.translate.onLangChange.subscribe((event:LangChangeEvent)=>{
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.slides = this.initHelper(event.translations.HELPERS);
 
     })
@@ -42,8 +42,8 @@ export class HelperPage {
   close() {
     this.navCtrl.pop();
   }
-  
-  initHelper(val:any):any{
+
+  initHelper(val: any): any {
     return [
       {
         title: val.title1,
@@ -64,12 +64,17 @@ export class HelperPage {
         title: val.title4,
         description: val.description4,
         image: val.image4
+      },
+      {
+        title: val.title5,
+        description: val.description5,
+        image: val.image5
       }]
   }
 
-  selectLang(lang){
+  selectLang(lang) {
     this.translate.use(lang);
-    this.dialogs.dialogInfo('Ok!' ,'Language changed' ,'success' ,1500);
+    this.dialogs.dialogInfo('Ok!', 'Language changed', 'success', 1500);
 
   }
 }

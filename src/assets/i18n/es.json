@@ -89,12 +89,16 @@
         "image3": "assets/imgs/tuto-2.png",
         "title4": "Tipo de dia",
         "description4": "Puedes seleccionar el tipo de dia ya sea Festivo ,Trabajado o vacaciones, esto teservira para ver que dias no trabajas.",
-        "image4": "assets/imgs/tuto-3.png"
+        "image4": "assets/imgs/tuto-3.png",
+        "title5": "Ajustes de Hours Worked",
+        "description5": "Modifica algunos ajustes de Hous Worked",
+        "image5": "assets/imgs/tuto-4.png"
     },
     "CHART_TYPE":"Tipo De Gráfico",
     "MODAL_DATE":"Dia {{ day }} de {{ month }} {{ year }}",
     "SELECT_LANGUAGE":"Seleciona tu idioma",
     "HOURS_WORKDAY":"Horas de tu jornada laboral",
     "SELECT_HOURS_WORKDAY":"Selecciona las horas que componen tu jornada laboral diaria.",
-    "SELECT_HOURS_WORKDAY_DESC":"Esto servira para comprobar las horas extras que haces."
+    "SELECT_HOURS_WORKDAY_DESC":"Esto servira para comprobar las horas extras que haces.",
+    "RELOAD_HELPER":"Volver a mostrar tutorial inicial."
 }

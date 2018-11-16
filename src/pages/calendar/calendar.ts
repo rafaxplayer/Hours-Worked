@@ -4,16 +4,16 @@ import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { Subject, Subscription } from 'rxjs';
 import { isBefore, isEqual, isValid, isWithinRange, isSameDay, differenceInMinutes } from 'date-fns'
 import { ModalController, Modal } from 'ionic-angular';
-import { DialogsProvider } from '../../providers/dialogs/dialogs.service';
+import { DialogsProvider } from '../../providers/dialogs/dialogs.provider';
 import { ChartsPage, HelperPage } from '../pages.index';
 import { SelectDayTypeComponent } from '../../components/modal/select-daytype/select-daytype';
 import { ModalEditComponent } from '../../components/modal/modal-edit/modal-edit';
 import { ModalDateComponent } from '../../components/modal/modal-date/modal-date';
 import { DatePicker } from '@ionic-native/date-picker';
 import { DayType } from '../../interfaces/interfaces';
-import { DatabaseProvider } from '../../providers/database/database';
+import { DatabaseProvider } from '../../providers/database/database.provider';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { HelpersProvider } from '../../providers/helpers/helpers';
+import { HelpersProvider } from '../../providers/helpers/helpers.provider';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -67,6 +67,7 @@ export class CalendarPage {
     private helper: HelpersProvider,
     private datePicker: DatePicker,
     private simpleStorage: Storage) {
+
     this.segmentDate = new Date();
     this.propsButtonDay = this.helper.DayTypes[0];
     this.viewDate = new Date();
@@ -191,7 +192,7 @@ export class CalendarPage {
 
   // hour click on day view
   hour_clicked(event) {
-    
+
     this.segmentDate = new Date(event.date);
     this.openDateModal();
   }
@@ -251,7 +252,7 @@ export class CalendarPage {
             this.dialogsProvider.dialogInfo(this.translate.instant('SAVED'), this.translate.instant('ADD_SCHEDULE'), 'success', 2000);
             this.startHorario = true;
             this.getHorarios();
-           
+
           }).catch(e => console.log(e));
 
         }

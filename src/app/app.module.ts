@@ -28,12 +28,13 @@ import { DatePicker } from '@ionic-native/date-picker';
 import { WheelSelector } from '@ionic-native/wheel-selector'
 
 //Providers
-import { DialogsProvider } from '../providers/dialogs/dialogs.service';
-import { DatabaseProvider } from '../providers/database/database';
-import { HelpersProvider } from '../providers/helpers/helpers';
+import { DialogsProvider } from '../providers/dialogs/dialogs.provider';
+import { DatabaseProvider } from '../providers/database/database.provider';
+import { HelpersProvider } from '../providers/helpers/helpers.provider';
 
 //Animations
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 //Calendar
 import { CalendarModule,DateFormatterParams,CalendarDateFormatter,CalendarNativeDateFormatter } from 'angular-calendar';

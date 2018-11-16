@@ -7,5 +7,8 @@
         <button ion-button icon-only (click)="goSettingsPage()" [hidden]="isActiveSettingsPage">
             <ion-icon name="settings"></ion-icon>
         </button>
+        <button ion-button icon-only (click)="goRoot()" [hidden]="!isActiveSettingsPage">
+            <ion-icon name="md-exit"></ion-icon>
+        </button>
     </ion-navbar>
 </ion-header>

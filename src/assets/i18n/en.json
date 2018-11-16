@@ -89,12 +89,16 @@
     "image3": "assets/imgs/tuto-2.png",
     "title4": "Type of day",
     "description4": "You can select the type of day whether day off, worked or holidays. This will help you see what days you do not work",
-    "image4": "assets/imgs/tuto-3.png"
+    "image4": "assets/imgs/tuto-3.png",
+    "title5": "Hours Worked settings",
+    "description5": "Modify some Hous Worked settings",
+    "image5": "assets/imgs/tuto-4.png"
   },
   "CHART_TYPE": "Chart Type",
   "MODAL_DATE": "{{ day }} of {{ month }} {{ year }}",
   "SELECT_LANGUAGE": "Select your language",
-  "HOURS_WORKDAY": "Horas de tu jornada laboral",
-  "SELECT_HOURS_WORKDAY": "Selecciona las horas que componen tu jornada laboral diaria.",
-  "SELECT_HOURS_WORKDAY_DESC": "Esto servira para comprobar las horas extras que haces."
+  "HOURS_WORKDAY": "Hours of your working day",
+  "SELECT_HOURS_WORKDAY": "Select the hours of your daily workday.",
+  "SELECT_HOURS_WORKDAY_DESC": "This will check the extra hours you do",
+  "RELOAD_HELPER":"Return to show initial help."
 }

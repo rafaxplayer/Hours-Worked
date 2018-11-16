@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { DayType } from '../../../interfaces/interfaces';
-import { HelpersProvider } from '../../../providers/helpers/helpers';
+import { HelpersProvider } from '../../../providers/helpers/helpers.provider';
 
 @Component({
   selector: 'select-free',

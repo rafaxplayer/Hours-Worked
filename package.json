@@ -45,6 +45,7 @@
         "cordova-plugin-whitelist": "^1.3.3",
         "cordova-sqlite-storage": "^2.3.3",
         "cordova-wheel-selector-plugin": "^1.1.1",
+        "css-animator": "^2.3.1",
         "date-fns": "^1.29.0",
         "firebase": "^5.2.0",
         "ionic-angular": "3.9.2",

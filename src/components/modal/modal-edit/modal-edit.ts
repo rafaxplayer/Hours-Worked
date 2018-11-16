@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NavParams, ViewController, ModalController, Modal } from 'ionic-angular';
 import { CalendarEvent } from 'angular-calendar';
-import { DialogsProvider } from '../../../providers/dialogs/dialogs.service';
+import { DialogsProvider } from '../../../providers/dialogs/dialogs.provider';
 import { isValid, isBefore, isEqual, differenceInMinutes } from 'date-fns'
 import { Subject } from 'rxjs';
-import { DatabaseProvider } from '../../../providers/database/database';
+import { DatabaseProvider } from '../../../providers/database/database.provider';
 import { TranslateService } from '@ngx-translate/core';
-import { HelpersProvider } from '../../../providers/helpers/helpers';
+import { HelpersProvider } from '../../../providers/helpers/helpers.provider';
 import { ModalDateComponent } from '../modal-date/modal-date';
 
 @Component({

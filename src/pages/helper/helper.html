@@ -19,15 +19,15 @@
             </ion-buttons>
           </ion-toolbar>
             <img style="max-height:150px" src="assets/imgs/logo_tuto.png" class="slide-image" />
-            <h2 class="slide-title"> Select your language</h2>
+            <h2 class="slide-title">{{ 'SELECT_LANGUAGE' | translate }}</h2>
             <ion-row>
               <ion-col (click)="selectLang('es')" justify-content-end>
                 <img style="max-width:100px" src="assets/imgs/es.png" alt="">
-                <div><b>Spanish</b></div>
+                <div><b>{{ 'SPANISH' | translate }}</b></div>
               </ion-col>
               <ion-col (click)="selectLang('en')" justify-content-start>
                   <img style="max-width:100px" src="assets/imgs/en.png" alt="">
-                  <div><b>English</b></div>
+                  <div><b>{{ 'ENGLISH' | translate }}</b></div>
               </ion-col>
             </ion-row>
             

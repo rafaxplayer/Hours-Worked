@@ -1,10 +1,12 @@
-import { Events } from 'ionic-angular';
+import { Events, NavController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DialogsProvider } from '../../providers/dialogs/dialogs.service';
+import { DialogsProvider } from '../../providers/dialogs/dialogs.provider';
 import { WheelSelector } from '@ionic-native/wheel-selector';
 import { Storage } from '@ionic/storage';
-import { HelpersProvider } from '../../providers/helpers/helpers';
+import { HelpersProvider } from '../../providers/helpers/helpers.provider';
+import { HelperPage } from '../pages.index';
+
 
 @Component({
   selector: 'settings-page',
@@ -16,7 +18,11 @@ export class SettingsPage {
 
   hNumber: string;
 
-  constructor(private translate: TranslateService,
+  helperPage: any = HelperPage;
+
+  constructor(
+    public navCtrl: NavController,
+    private translate: TranslateService,
     private dialogs: DialogsProvider,
     private selNumberHours: WheelSelector,
     private simpleStorage: Storage,
@@ -74,4 +80,5 @@ export class SettingsPage {
     this.dialogs.dialogInfo('Ok!', 'Language changed', 'success', 1500);
 
   }
+
 }
